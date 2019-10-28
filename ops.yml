@@ -5,7 +5,7 @@ ops:
     description: # Short description for what your op does (required)
       An Op to simplify an opinionated Github workflow.
     public: # Determines whether this version of the op is visible to other people
-      true
+      false
     sourceCodeURL: ""
     run: # Command that is executed when op is started ("npm start", "./start_script.sh", etc.) (required)
       node /ops/lib/index.js
@@ -14,7 +14,7 @@ ops:
       # To use environment variables from the Host, use the $ prefix:
       - TERM=xterm-256color
       - GITHUB_TEST_TOKEN=$GITHUB_TEST_TOKEN
-      - GITHUB_TEST_REPO_URL=$GITHUB_TEST_REPO_URL
+      - GITHUB_TEST_TARGET=$GITHUB_TEST_TARGET
     src: # Whitelist files and folders to be included in the published op's WORKDIR
       - src
       - Dockerfile

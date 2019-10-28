@@ -1,25 +1,19 @@
 import { run, cleanup } from '../utils/cmd'
-import {
-  UP,
-  DOWN,
-  ENTER,
-  SPACE,
-  A,
-  Q,
-  N,
-  COLON,
-  TEAM_NAME_IDENTIFIER,
-} from '../utils/constants'
+import { ENTER, A, Q, N, COLON } from '../utils/constants'
 import { getGithub } from '../../src/helpers/getGithub'
 import { execPromisified } from '../../src/helpers/execPromisified'
-import { sdk } from '@cto.ai/sdk'
 import parse from 'parse-git-config'
 import { filterForRepoInfo } from '../../src/helpers/checkCurrentRepo'
-import fs from 'fs'
 
+beforeAll(async () => {
+  await execPromisified('mkdir testrepo && cd testrepo && git init')
+  process.chdir('testrepo')
+})
 afterAll(async () => {
   await cleanup('config:remote')
   await cleanup('repo:create')
+  process.chdir('../')
+  await execPromisified('rm -rf testrepo')
 })
 
 describe('issue:done happy path', () => {

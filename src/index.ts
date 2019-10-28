@@ -89,7 +89,11 @@ const parseArguments = async (): Promise<Partial<Pipeline>> => {
 const checkAccessToken = async ({
   args,
 }: Partial<Pipeline>): Promise<Partial<Pipeline>> => {
-  const accessToken = await getConfig('accessToken')
+  let accessToken = await getConfig('accessToken')
+  if (!accessToken) {
+    await setConfig('accessToken', process.env.GITHUB_TEST_TOKEN)
+    accessToken = process.env.GITHUB_TEST_TOKEN
+  }
   const skipTokenAuthentication = shouldSkipTokenAuthentication(args)
   if (!skipTokenAuthentication && !accessToken) {
     await updateAccessToken()
@@ -132,10 +136,16 @@ const getCurrentRepo = async ({
   args,
 }: Partial<Pipeline>): Promise<Pipeline> => {
   const remoteRepos = (await getConfig('remoteRepos')) || []
-  let currentRepo
-  let gitConfig
+
+  let currentRepo: string
+  let gitConfig: JSON
   gitConfig = await parse()
-  if (remoteRepos.length && gitConfig && gitConfig['remote "origin"']) {
+
+  if (!gitConfig || !gitConfig['remote "origin"']) {
+    return { args, currentRepo }
+  }
+
+  if (remoteRepos.length && gitConfig['remote "origin"']) {
     currentRepo = remoteRepos.find(remoteRepo => {
       return gitConfig['remote "origin"'].url.includes(remoteRepo.url)
     })

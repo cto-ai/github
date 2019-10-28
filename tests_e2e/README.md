@@ -3,11 +3,12 @@
 ## Setup
 
 need to set environment variable for following:
-- GITHUB_TEST_TOKEN=your_access_token (your access token must have all repo/admin access checked)
-- GITHUB_TEST_REPO_URL=your_github_url
-- signed into ops platform
+- `GITHUB_TEST_TOKEN`=your_access_token (your access token must have all repo/admin access checked)
+- `GITHUB_TEST_TARGET`=op you want to test against (i.e @cto.ai/github)
+- `EXISTING_USER_NAME`=existing user name for testing
+- `EXISTING_USER_PASSWORD`=existing user password for testing
 
-- You must have an empty repo named `testgh` with issue enabled with new dummy account
+- You must have an empty repo named `testgh` with issue enabled with new dummy account that is associated with GITHUB_TEST_TOKEN
 
 ## Run order
 

@@ -88,7 +88,7 @@ export const ParseAndHandleError = async (
     process.exit()
   } else {
     // base case
-    sdk.log(err.message)
+    sdk.log(err)
     process.exit()
   }
 }
