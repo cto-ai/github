@@ -15,6 +15,8 @@ ops:
       - TERM=xterm-256color
       - GITHUB_TEST_TOKEN=$GITHUB_TEST_TOKEN
       - GITHUB_TEST_TARGET=$GITHUB_TEST_TARGET
+      - EXISTING_USER_NAME=$EXISTING_USER_NAME
+      - EXISTING_USER_PASSWORD=$EXISTING_USER_PASSWORD
     src: # Whitelist files and folders to be included in the published op's WORKDIR
       - src
       - Dockerfile
