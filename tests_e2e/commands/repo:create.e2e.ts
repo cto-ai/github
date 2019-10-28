@@ -23,7 +23,7 @@ describe('repo:create happy path', () => {
       const result = await run({
         args: ['repo:create'],
         inputs: [ENTER, A, ENTER, A, ENTER, ENTER, ENTER],
-        timeout: 8000,
+        timeout: 12000,
       })
       await sleep(2000)
 

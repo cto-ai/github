@@ -9,9 +9,8 @@ export const COLON = '\x3A'
 export const X = '\x78'
 
 export const OP_NAME = process.env.GITHUB_TEST_TARGET
-//TODO: FIX IDS
-export const OP_PATH =
-  '/Users/administrator/.nvm/versions/node/v11.14.0/bin/ops'
+
+export const OP_PATH = 'ops'
 export const TEAM_NAME_IDENTIFIER = 'Team Name:'
 
 export const GITHUB_TEST_TOKEN = process.env.GITHUB_TEST_TOKEN
