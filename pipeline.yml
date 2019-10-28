@@ -24,4 +24,4 @@ jobs:
           params:
             MAC_STADIUM_PASS: ((MAC_STADIUM_PASS))
             MAC_ADDRESS: ((MAC_ADDRESS))
-            SSH_PRIVATE_KEY: ((SSH_PRIVATE_KEY))
+            # SSH_PRIVATE_KEY: ((SSH_PRIVATE_KEY))
