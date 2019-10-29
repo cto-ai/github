@@ -90,6 +90,6 @@ export const ParseAndHandleError = async (
   } else {
     // base case
     console.log(err)
-    process.exit()
+    // process.exit()
   }
 }
