@@ -30,5 +30,5 @@
 # echo "DDD"
 
 # sshpass -p ${MAC_STADIUM_PASS} ssh -o stricthostkeychecking=no administrator@${MAC_ADDRESS} /Users/administrator/ci_github_script.sh
-
+ls -al
 ./ci_github_script.sh
