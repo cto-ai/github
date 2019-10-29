@@ -6,7 +6,7 @@ ops:
       An Op to simplify an opinionated Github workflow.
     public: # Determines whether this version of the op is visible to other people
       true
-    sourceCodeURL: ""
+    sourceCodeURL: "https://github.com/cto-ai/github"
     run: # Command that is executed when op is started ("npm start", "./start_script.sh", etc.) (required)
       node /ops/lib/index.js
     env:
