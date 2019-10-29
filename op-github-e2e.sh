@@ -32,7 +32,7 @@
 # sshpass -p ${MAC_STADIUM_PASS} ssh -o stricthostkeychecking=no administrator@${MAC_ADDRESS} /Users/administrator/ci_github_script.sh
 
 npm i -g install @cto.ai/ops
-cd /op-github-repo
+cd op-github-repo
 npm install 
 npm test
 
