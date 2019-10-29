@@ -3,7 +3,7 @@ import { ENTER, A } from '../utils/constants'
 import { execPromisified } from '../../src/helpers/execPromisified'
 
 beforeAll(async () => {
-  // await signin()
+  await signin()
   sleep(3000)
   await execPromisified('mkdir testrepo && cd testrepo && git init')
   process.chdir('testrepo')

@@ -35,5 +35,3 @@ npm i -g install @cto.ai/ops
 cd op-github-repo
 npm install 
 npm test
-
-./ci_github_script.sh
