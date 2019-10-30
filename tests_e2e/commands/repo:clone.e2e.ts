@@ -12,7 +12,6 @@ afterAll(async () => {
   await cleanup('repo:clone')
   process.chdir('../')
   await execPromisified('rm -rf testrepo')
-  await signout()
 })
 
 describe('repo:clone happy path', () => {
