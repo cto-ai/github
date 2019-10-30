@@ -6,10 +6,16 @@ resources:
       uri: https://github.com/minsohng/op-github.git
       branch: master
 
+  - name: 5m-timer
+    type: time
+    source: { interval: 5m }
+
 jobs:
   - name: op-github-e2e
     public: true
     plan:
+      - get: 5m-timer
+        trigger: true
       - get: op-github-repo
       - task: op-github-e2e
         config:
