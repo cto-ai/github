@@ -12,7 +12,7 @@ This Op also requires an access token for Github interactions.
 
 * To create a Github access token:
   
-  * Create an access token with the `repo` and `admin` scopes following the instructions here[here](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line).
+  * Create an access token with the `repo` and `admin` scopes following the instructions [here](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line).
 
   * Copy the access token and provide it when prompted.
   
