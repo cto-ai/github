@@ -1,14 +1,14 @@
-# 🛠 CTO.ai Github Op 🚀
+# 🚀 CTO.ai - Official Op - Github 🚀
 
 An Op to simplify an opinionated Github workflow.
 
-![Github Op](./screens/github.png)
-
 ## Requirements 🔑
 
-To run this or any other Op, install the [Ops Platform.](https://cto.ai/platform). Find more information about how to run and build Ops via the [Platform Documentation](https://cto.ai/docs/overview)
+To run this or any other Op, install the [Ops Platform.](https://cto.ai/platform).
 
-This Op also requires an access token to interact with Github.
+Find information about how to run and build Ops via the [Ops Platform Documentation](https://cto.ai/docs/overview)
+
+This Op also requires an access token for Github interactions.
 
 * To create a Github access token:
   
@@ -20,11 +20,11 @@ This Op also requires an access token to interact with Github.
 
 ## Usage
 
-Running `ops run github`, gives you a list of available commands to get you started. 
+Running `ops run github`, gives you a list of available commands to help you get started.
 
 ## Local Development
 
-To develop and run ops locally:
+To develop and run Ops locally:
 
   1. Clone the repo `git clone <git url>`
   2. `cd` into the directory and install dependancies with `npm install`
