@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "npm run test:e2e",
-    "test:e2e": "cd tests_e2e && jest repo:clone",
+    "test:e2e": "cd tests_e2e && jest repo:clone && jest issue:create",
     "build": "tsc && rm -rf lib/templates && cp -r src/templates lib/templates",
     "start": "node lib/index.js",
     "prestart": "npm run build"

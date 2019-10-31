@@ -1,4 +1,4 @@
-import { run, cleanup } from '../utils/cmd'
+import { run, cleanup, signin } from '../utils/cmd'
 import { ENTER, A, Q, N, COLON } from '../utils/constants'
 import { getGithub } from '../../src/helpers/getGithub'
 import { execPromisified } from '../../src/helpers/execPromisified'
@@ -6,6 +6,7 @@ import parse from 'parse-git-config'
 import { filterForRepoInfo } from '../../src/helpers/checkCurrentRepo'
 
 beforeAll(async () => {
+  await signin()
   await execPromisified('mkdir testrepo && cd testrepo && git init')
   process.chdir('testrepo')
 })

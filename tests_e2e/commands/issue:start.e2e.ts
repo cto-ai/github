@@ -1,9 +1,10 @@
-import { run, cleanup } from '../utils/cmd'
+import { run, cleanup, signin } from '../utils/cmd'
 import { ENTER, A, Q, COLON } from '../utils/constants'
 import { checkForLocalBranch } from '../../src/helpers/git'
 import { execPromisified } from '../../src/helpers/execPromisified'
 
 beforeAll(async () => {
+  await signin()
   await execPromisified('mkdir testrepo')
   process.chdir('testrepo')
 })
