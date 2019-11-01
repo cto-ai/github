@@ -53,13 +53,7 @@ export const issueStart = async (cmdOptions: CommandOptions) => {
 
   const answers = await ux.prompt<AnsSelectIssueStart>(questions)
   const { issue } = answers
-
-  // get user to name the branch with the current user
-  const {
-    data: { login },
-  } = await github.users.getAuthenticated()
-
-  const branchName = `${login}-${issue.number}-${issue.title.replace(' ', '-')}`
+  const branchName = `${issue.number}-${issue.title.replace(/\s/g, '-')}`
 
   const hasLocalBranch = await checkForLocalBranch(branchName)
 
@@ -80,7 +74,11 @@ export const issueStart = async (cmdOptions: CommandOptions) => {
     ])
   } catch (err) {
     debug('issue start failed', err)
-    await ParseAndHandleError(err, 'Remove and Add Labels', LABELS.PM_TASKS.name)
+    await ParseAndHandleError(
+      err,
+      'Remove and Add Labels',
+      LABELS.PM_TASKS.name,
+    )
   }
 
   try {

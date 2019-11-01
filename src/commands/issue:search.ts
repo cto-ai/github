@@ -249,14 +249,7 @@ ${stateStr}\t ${commentStr}\t ${assigneeStr}\n`
     const { issue } = await ux.prompt(issueSelectPrompt(issueSelectionList))
 
     await ux.spinner.start('🚧 Setting up a branch...')
-    // get user to name the branch with current user
-    const {
-      data: { login },
-    } = await github.users.getAuthenticated()
-    const branchName = `${login}-${issue.number}-${issue.title.replace(
-      ' ',
-      '-',
-    )}`
+    const branchName = `${issue.number}-${issue.title.replace(/\s/g, '-')}`
     const hasLocalBranch = await checkForLocalBranch(branchName)
 
     if (!hasLocalBranch) {
