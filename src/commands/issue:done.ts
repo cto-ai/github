@@ -112,7 +112,7 @@ export const issueDone = async (cmdOptions: CommandOptions) => {
     const {
       data: { login },
     } = await github.users.getAuthenticated()
-    const issue_number = currentBranch.replace(`${login}-`, '').split('-')[0]
+    const issue_number = currentBranch.split('-')[0]
     const RESOLVE_STR = `Resolves #${issue_number}. `
     const { title, comment } = await ux.prompt<AnsPullRequest>(
       pullRequestQuestions,

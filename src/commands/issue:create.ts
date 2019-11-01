@@ -82,7 +82,7 @@ export const issueCreate = async (cmdOptions: CommandOptions) => {
     const createResponse = await github.issues.create({
       owner,
       repo,
-      title: title.replace(/ /g, '-'),
+      title,
       labels,
       body,
     })
