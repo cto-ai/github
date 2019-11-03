@@ -3,7 +3,7 @@ ops:
   - name: # Unique identifier for your op (required)
       github
     description: # Short description for what your op does (required)
-      An Op to simplify an opinionated Github workflow.
+      An Op to simplify an opinionated GitHub workflow.
     public: # Determines whether this version of the op is visible to other people
       true
     sourceCodeURL: "https://github.com/cto-ai/github"
@@ -34,19 +34,19 @@ ops:
     help: # Configure the output for when your op is run with `op --help` or `op -h`
       usage: "ops run github [ARGUMENT]"
       arguments:
-        "repo:create": "Initializes a new git repo in the current working directory and pushes to the user's selected organization or personal Github repository."
+        "repo:create": "Initializes a new git repo in the current working directory and pushes to the user's selected organization or personal GitHub repository."
         "repo:clone": "Clones a remote repo that you are a contributor on to your current working directory."
-        "issue:create": "Creates a new issue in Github. Current working directory must be a repo either cloned or created using the repo:create or repo:clone commands."
+        "issue:create": "Creates a new issue in GitHub. Current working directory must be a repo either cloned or created using the repo:create or repo:clone commands."
         "issue:list": "Lists all the issues the user has access to. If the current working directory is a repo in github then the issues are scope by the repo otherwise it displays all issues that you are assigned to or created by you etc."
-        "issue:search": "Searches all issues in Github for your current working directory by selected filters. User can pass optional query string argument in form of `[-q <+querystring> | --query <+querystring>]` for additional filters. Please check [Github querystring](https://help.github.com/en/articles/searching-issues-and-pull-requests) for detailed info"
-        "issue:start": "Lists all issues in Github for your current working directory. Selecting a issue will checkout a branch for that issue and set the upstream in github."
-        "issue:save": "Adds all unstaged changes, commits and pushes to Github for the current working branch."
+        "issue:search": "Searches all issues in GitHub for your current working directory by selected filters. User can pass optional query string argument in form of `[-q <+querystring> | --query <+querystring>]` for additional filters. Please check [GitHub querystring](https://help.github.com/en/articles/searching-issues-and-pull-requests) for detailed info"
+        "issue:start": "Lists all issues in GitHub for your current working directory. Selecting a issue will checkout a branch for that issue and set the upstream in github."
+        "issue:save": "Adds all unstaged changes, commits and pushes to GitHub for the current working branch."
         "issue:done": "Converts the current working issue into a pull-request and allows you to tag reviewers."
         "pulls:list": "Lists all the pull requests for a given repo. The current working directory has to be a repo."
         "label:add": "Allows you to create a new label in a repo and sync the label addition across other repos in the organization."
         "label:edit": "Allows you to edit a label and sync the edit across other repos in the organization."
         "label:remove": "Allows you to remove label from a repo and sync the removal across other repos in the organization."
         "label:sync": "Allows you to sync up labels from one base repo to any other repo(s) that you have access to. The op will check for any missing labels in the targeted repo(s) and add in as necessary."
-        "token:update": "Allows you to update your Github access token."
+        "token:update": "Allows you to update your GitHub access token."
       options:
         help: "shows help content"
