@@ -1,6 +1,6 @@
-# 🚀 CTO.ai - Official Op - Github 🚀
+# 🚀 CTO.ai - Official Op - GitHub 🚀
 
-An Op to simplify an opinionated Github workflow.
+An Op to simplify an opinionated GitHub workflow.
 
 ## Requirements 🔑
 
@@ -8,15 +8,15 @@ To run this or any other Op, install the [Ops Platform.](https://cto.ai/platform
 
 Find information about how to run and build Ops via the [Ops Platform Documentation](https://cto.ai/docs/overview)
 
-This Op also requires an access token for Github interactions.
+This Op also requires an access token for GitHub interactions.
 
-* To create a Github access token:
+* To create a GitHub access token:
   
   * Create an access token with the `repo` and `admin` scopes following the instructions [here](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line).
 
   * Copy the access token and provide it when prompted.
   
-  * Your remote `origin` must be set to a valid Github repo.
+  * Your remote `origin` must be set to a valid GitHub repo.
 
 ## Usage
 
@@ -32,11 +32,11 @@ To develop and run Ops locally:
 
 ## Available Commands 💡
 
-All the commands start with `ops run github`. From there, you would use the following commands to manage your Github flow.
+All the commands start with `ops run github`. From there, you would use the following commands to manage your GitHub flow.
 
 * `repo:create`
 
-Initializes a new git repo in the current working directory and pushes to the user's selected organization or personal Github repository.
+Initializes a new git repo in the current working directory and pushes to the user's selected organization or personal GitHub repository.
 
 * `repo:clone`
 
@@ -44,7 +44,7 @@ Clones a remote repo that you are a contributor on to your current working direc
 
 * `issue:create`
 
-Creates a new issue in Github. Current working directory must be a repo either cloned or created using the
+Creates a new issue in GitHub. Current working directory must be a repo either cloned or created using the
 repo:create or repo:clone commands.
 
 * `issue:list`
@@ -54,16 +54,16 @@ repo in github then the issues are scope by the repo otherwise it displays all i
 
 * `issue:search`
 
-Searches all issues in Github for your current working directory by selected filters. User can pass optional query string argument in form of `[-q <+querystring> | --query <+querystring>]` for additional filters.  
-Please check [Github querystring](https://help.github.com/en/articles/searching-issues-and-pull-requests) for detailed info
+Searches all issues in GitHub for your current working directory by selected filters. User can pass optional query string argument in form of `[-q <+querystring> | --query <+querystring>]` for additional filters.  
+Please check [GitHub querystring](https://help.github.com/en/articles/searching-issues-and-pull-requests) for detailed info
 
 * `issue:start`
 
-Lists all issues in Github for your current working directory. Selecting a issue will checkout a branch for that issue and set the upstream in github.
+Lists all issues in GitHub for your current working directory. Selecting a issue will checkout a branch for that issue and set the upstream in github.
 
 * `issue:save`
 
-Adds all unstaged changes, commits and pushes to Github for the current working
+Adds all unstaged changes, commits and pushes to GitHub for the current working
 branch.
 
 * `issue:done`
@@ -92,7 +92,7 @@ Allows you to sync up labels from one base repo to any other repo(s) that you ha
 
 * `token:update`
 
-Allows you to update your Github access token.
+Allows you to update your GitHub access token.
 
 ## Debugging this Op
 

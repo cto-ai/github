@@ -1,4 +1,4 @@
-# E2E test for Github
+# E2E test for GitHub
 
 ## Setup
 
