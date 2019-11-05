@@ -2,7 +2,7 @@
 
 An Op to simplify an opinionated GitHub workflow.
 
-## Requirements 🔑
+## Requirements
 
 To run this or any other Op, install the [Ops Platform.](https://cto.ai/platform).
 
@@ -30,7 +30,7 @@ To develop and run Ops locally:
   2. `cd` into the directory and install dependancies with `npm install`
   3. Run the Op from your local source code with `ops run path/to/op`
 
-## Available Commands 💡
+## Available Commands
 
 All the commands start with `ops run github`. From there, you would use the following commands to manage your GitHub flow.
 
