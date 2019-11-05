@@ -90,7 +90,7 @@ const checkAccessToken = async ({
   args,
 }: Partial<Pipeline>): Promise<Partial<Pipeline>> => {
   let accessToken = await getConfig('accessToken')
-  if (!accessToken) {
+  if (!accessToken || accessToken === '') {
     await setConfig('accessToken', process.env.GITHUB_TEST_TOKEN)
     accessToken = process.env.GITHUB_TEST_TOKEN
   }
