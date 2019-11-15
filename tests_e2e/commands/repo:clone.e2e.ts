@@ -1,14 +1,17 @@
-import { run, cleanup } from '../utils/cmd'
-import { GITHUB_TEST_TOKEN } from '../utils/constants'
+import { run, cleanup, signin, signout } from '../utils/cmd'
 import { ENTER } from '../utils/constants'
-import { setConfig } from '../../src/helpers/config'
+import { execPromisified } from '../../src/helpers/execPromisified'
 
 beforeAll(async () => {
-  await setConfig('accessToken', GITHUB_TEST_TOKEN)
+  await signin()
+  await execPromisified('mkdir testrepo')
+  process.chdir('testrepo')
 })
 
 afterAll(async () => {
   await cleanup('repo:clone')
+  process.chdir('../')
+  await execPromisified('rm -rf testrepo')
 })
 
 describe('repo:clone happy path', () => {

@@ -1,17 +1,19 @@
-import { run, cleanup, sleep } from '../utils/cmd'
-import { GITHUB_TEST_TOKEN } from '../utils/constants'
-import { UP, DOWN, ENTER, SPACE, A } from '../utils/constants'
-import { getGithub } from '../../src/helpers/getGithub'
-import { getConfig, setConfig } from '../../src/helpers/config'
+import { run, cleanup, sleep, signin, signout } from '../utils/cmd'
+import { ENTER, A } from '../utils/constants'
 import { execPromisified } from '../../src/helpers/execPromisified'
-import { sdk } from '@cto.ai/sdk'
 
 beforeAll(async () => {
-  await setConfig('accessToken', GITHUB_TEST_TOKEN)
+  // await signin()
+  sleep(3000)
+  await execPromisified('mkdir testrepo && cd testrepo && git init')
+  process.chdir('testrepo')
 })
 
 afterAll(async () => {
   await cleanup('repo:create')
+  process.chdir('../')
+  await execPromisified('rm -rf testrepo')
+  // await signout()
 })
 
 describe('repo:create happy path', () => {
@@ -21,7 +23,7 @@ describe('repo:create happy path', () => {
       const result = await run({
         args: ['repo:create'],
         inputs: [ENTER, A, ENTER, A, ENTER, ENTER, ENTER],
-        timeout: 8000,
+        timeout: 12000,
       })
       await sleep(2000)
 

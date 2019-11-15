@@ -36,7 +36,7 @@ All the commands start with `ops run github`. From there, you would use the foll
 
 * `repo:create`
 
-Initializes a new git repo in the current working directory and pushes to the user's selected organization or personal GitHub repository.
+Initializes a new git repo in the current working directory and pushes to the user's selected organization or personal Github repository. Current working directory must be git initialized.
 
 * `repo:clone`
 

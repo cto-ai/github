@@ -23,7 +23,12 @@ export const saveRemoteRepoToConfig = async (owner, name): Promise<string> => {
         url,
       },
     ]
-    await setConfig('remoteRepos', remoteRepos)
+
+    const newRemoteRepos = remoteRepos.filter(({ url }) => {
+      return !this[url] && (this[url] = url)
+    }, {})
+
+    await setConfig('remoteRepos', newRemoteRepos)
     return url
   } catch (err) {
     debug('save remote to config failed', err)

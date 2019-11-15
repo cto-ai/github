@@ -8,9 +8,12 @@ export const N = '\x6E'
 export const COLON = '\x3A'
 export const X = '\x78'
 
-export const OP_NAME = 'github'
-export const OP_PATH = '/usr/local/bin/ops'
+export const OP_NAME = process.env.GITHUB_TEST_TARGET
+
+export const OP_PATH = 'ops'
 export const TEAM_NAME_IDENTIFIER = 'Team Name:'
 
 export const GITHUB_TEST_TOKEN = process.env.GITHUB_TEST_TOKEN
-export const GITHUB_TEST_REPO_URL = process.env.GITHUB_TEST_REPO_URL
+
+export const EXISTING_USER_NAME = process.env.EXISTING_USER_NAME
+export const EXISTING_USER_PASSWORD = process.env.EXISTING_USER_PASSWORD

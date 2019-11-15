@@ -55,6 +55,7 @@ export const ParseAndHandleError = async (
     sdk.log(`😅 The label ${labelName} does not exist for this repo!`)
     process.exit()
   } else if (err.status && err.status === 404) {
+    console.log(err)
     sdk.log(
       `😅 This Github repo either does not exist, or you do not have user permissions to access this repo's details!`,
     )
@@ -88,7 +89,7 @@ export const ParseAndHandleError = async (
     process.exit()
   } else {
     // base case
-    sdk.log(err.message)
-    process.exit()
+    console.log(err)
+    // process.exit()
   }
 }

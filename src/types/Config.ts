@@ -2,7 +2,6 @@ export interface Config {
   accessToken: string
   email: string
   name: string
-  currentIssue: number
   remoteRepos: RemoteRepo[]
 }
 
