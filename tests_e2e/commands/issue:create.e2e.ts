@@ -1,17 +1,13 @@
-import { run, cleanup } from '../utils/cmd'
-import { GITHUB_TEST_TOKEN, GITHUB_TEST_REPO_URL } from '../utils/constants'
-import { UP, DOWN, ENTER, SPACE, A, Q, COLON } from '../utils/constants'
+import { run, cleanup, signin } from '../utils/cmd'
+import { ENTER, A, Q, COLON } from '../utils/constants'
 import { getGithub } from '../../src/helpers/getGithub'
-import { getConfig, setConfig } from '../../src/helpers/config'
 import { execPromisified } from '../../src/helpers/execPromisified'
 import parse from 'parse-git-config'
 import { filterForRepoInfo } from '../../src/helpers/checkCurrentRepo'
 
 beforeAll(async () => {
-  await setConfig('accessToken', GITHUB_TEST_TOKEN)
-
+  await signin()
   const github = await getGithub()
-
   const name = 'testgh-issue'
   try {
     const { data } = await github.repos.createForAuthenticatedUser({
@@ -31,7 +27,7 @@ afterAll(async () => {
 
 describe('issue:create happy path', () => {
   test(
-    'should successfully clone repo from github',
+    'should create issue on Github',
     async () => {
       await run({
         args: ['issue:create'],

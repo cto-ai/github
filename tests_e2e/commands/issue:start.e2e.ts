@@ -1,20 +1,20 @@
-import { run, cleanup } from '../utils/cmd'
-import { GITHUB_TEST_TOKEN, GITHUB_TEST_REPO_URL } from '../utils/constants'
-import { UP, DOWN, ENTER, SPACE, A, Q, COLON } from '../utils/constants'
-import { getGithub } from '../../src/helpers/getGithub'
-import { getConfig, setConfig } from '../../src/helpers/config'
-import { execPromisified } from '../../src/helpers/execPromisified'
-import parse from 'parse-git-config'
-import { filterForRepoInfo } from '../../src/helpers/checkCurrentRepo'
+import { run, cleanup, signin } from '../utils/cmd'
+import { ENTER, A, Q, COLON } from '../utils/constants'
 import { checkForLocalBranch } from '../../src/helpers/git'
+import { execPromisified } from '../../src/helpers/execPromisified'
 
 beforeAll(async () => {
-  await setConfig('accessToken', GITHUB_TEST_TOKEN)
+  await signin()
+  await execPromisified('mkdir testrepo')
+  process.chdir('testrepo')
 })
 
 afterAll(async () => {
   await cleanup('issue:start')
+  process.chdir('../')
+  await execPromisified('rm -rf testrepo')
 })
+
 describe('issue:start happy path', () => {
   test(
     'should checkout new branch',

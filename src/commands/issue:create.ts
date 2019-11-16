@@ -86,7 +86,6 @@ export const issueCreate = async (cmdOptions: CommandOptions) => {
       labels,
       body,
     })
-    await setConfig('currentIssue', createResponse.data.id)
 
     sdk.log(
       `\n🎉 Successfully created issue ${ux.colors.callOutCyan(

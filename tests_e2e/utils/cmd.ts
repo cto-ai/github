@@ -1,11 +1,14 @@
-import { spawn, ChildProcess, SpawnOptions, exec } from 'child_process'
-import { getConfig, setConfig } from '../../src/helpers/config'
-
+import { spawn, ChildProcess, SpawnOptions } from 'child_process'
 import { cleanupFn } from '../utils/cleanupFn'
 import Debug from 'debug'
 import concat from 'concat-stream'
-
-import { OP_NAME, OP_PATH } from '../utils/constants'
+import {
+  OP_NAME,
+  OP_PATH,
+  EXISTING_USER_NAME,
+  EXISTING_USER_PASSWORD,
+} from '../utils/constants'
+import { execPromisified } from '../../src/helpers/execPromisified'
 
 const debugVerbose = Debug('cmd:verbose')
 
@@ -102,22 +105,16 @@ const sleep = (milliseconds: number) => {
   return new Promise(resolve => setTimeout(() => resolve(), milliseconds))
 }
 
-const signin = () =>
-  //   user: string = EXISTING_USER_NAME,
-  //   password: string = EXISTING_USER_PASSWORD,
-  {
-    //   return run(['account:signin', '-u', user, '-p', password])
-  }
-
+const signin = async (
+  user: string = EXISTING_USER_NAME,
+  password: string = EXISTING_USER_PASSWORD,
+) => {
+  return await execPromisified(
+    `${OP_PATH} account:signin -u ${user} -p ${password}`,
+  )
+}
 const signout = async () => {
-  // return run(['account:signout'])
+  return await execPromisified(`${OP_PATH} account:signout`)
 }
 
-// const main = async () => {
-//   run({
-//     args: ['repo:create'],
-//     options: { stdio: 'inherit' },
-//   })
-// }
-// main()
 export { run, sleep, cleanup, signin, signout }
