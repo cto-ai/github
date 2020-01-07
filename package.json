@@ -15,17 +15,17 @@
   "devDependencies": {
     "@types/concat-stream": "^1.6.0",
     "@types/debug": "^4.1.5",
-    "@types/inquirer": "^6.0.2",
-    "@types/jest": "^24.0.18",
-    "@types/node": "^12.0.1",
+    "@types/inquirer": "^6.5.0",
+    "@types/jest": "^24.0.25",
+    "@types/node": "^12.12.24",
     "child_process": "^1.0.2",
     "concat-stream": "^2.0.0",
     "fs": "0.0.1-security",
     "jest": "^24.9.0",
     "npm": "^6.13.4",
-    "prettier": "^1.17.1",
-    "ts-jest": "^24.1.0",
-    "typescript": "^3.4.5"
+    "prettier": "^1.19.1",
+    "ts-jest": "^24.3.0",
+    "typescript": "^3.7.4"
   },
   "dependencies": {
     "@cto.ai/sdk": "^1.5.1",

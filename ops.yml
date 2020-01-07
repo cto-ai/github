@@ -1,12 +1,13 @@
 version: "1"
 commands:
   - name: # Unique identifier for your op (required)
-        github:1.0.0
+      github:1.0.0
     description: # Short description for what your op does (required)
       An Op to simplify an opinionated GitHub workflow.
     public: # Determines whether this version of the op is visible to other people
       true
     sourceCodeURL: "https://github.com/cto-ai/github"
+    sdk: "2"
     run: # Command that is executed when op is started ("npm start", "./start_script.sh", etc.) (required)
       node /ops/lib/index.js
     env:
@@ -30,8 +31,8 @@ commands:
       - /tmp:/tmp
       - ~/.ssh:/root/.ssh
       - ~/.ops/cto.ai/github:/root/.ops/cto.ai/github
-    port: # Map ports for your op container
-      - 3000:3000
+    # port: # Map ports for your op container
+    #  - 3000:3000
     help: # Configure the output for when your op is run with `op --help` or `op -h`
       usage: "ops run github [ARGUMENT]"
       arguments:
