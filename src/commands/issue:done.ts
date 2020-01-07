@@ -1,18 +1,14 @@
-import branch from 'git-branch'
+import { Question } from '@cto.ai/inquirer'
+import { sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
-import { sdk, ux } from '@cto.ai/sdk'
-import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
-import { CommandOptions } from '../types/Config'
-import { getGithub } from '../helpers/getGithub'
+import branch from 'git-branch'
 import { LABELS } from '../constants'
-import {
-  AnsSelectYesNo,
-  AnsSelectContributor,
-  AnsPullRequest,
-} from '../types/Answers'
-import { Question } from '@cto.ai/inquirer'
 import { ParseAndHandleError } from '../errors'
+import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import { getGithub } from '../helpers/getGithub'
+import { AnsPullRequest, AnsSelectContributor, AnsSelectYesNo } from '../types/Answers'
+import { CommandOptions } from '../types/Config'
 const debug = Debug('github:issueDone')
 
 const pullRequestQuestions: Question<AnsPullRequest>[] = [

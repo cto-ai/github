@@ -1,14 +1,14 @@
+import { Question } from '@cto.ai/inquirer'
 import { sdk, ux } from '@cto.ai/sdk'
-import * as fuzzy from 'fuzzy'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
+import * as fuzzy from 'fuzzy'
+import { ParseAndHandleError } from '../errors'
+import { getConfig } from '../helpers/config'
 import { getGithub } from '../helpers/getGithub'
 import { isRepoCloned } from '../helpers/isRepoCloned'
-import { IssueListFuzzy, IssueListValue } from '../types/IssueTypes'
 import { AnsIssueList } from '../types/Answers'
-import { Question } from '@cto.ai/inquirer'
-import { getConfig } from '../helpers/config'
-import { ParseAndHandleError } from '../errors'
+import { IssueListFuzzy, IssueListValue } from '../types/IssueTypes'
 
 const debug = Debug('github:issueList')
 

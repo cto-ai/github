@@ -1,14 +1,14 @@
+import { Question } from '@cto.ai/inquirer'
 import { sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
-import { createLabels } from '../helpers/labels'
-import { CommandOptions } from '../types/Config'
-import { getGithub } from '../helpers/getGithub'
-import { LabelKeys } from '../types/Labels'
-import { Question } from '@cto.ai/inquirer'
-import { AnsSelectYesNo, AnsSelectReposForLabel } from '../types/Answers'
-import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { ParseAndHandleError } from '../errors'
+import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import { getGithub } from '../helpers/getGithub'
+import { createLabels } from '../helpers/labels'
+import { AnsSelectReposForLabel, AnsSelectYesNo } from '../types/Answers'
+import { CommandOptions } from '../types/Config'
+import { LabelKeys } from '../types/Labels'
 
 const debug = Debug('github:labelAdd')
 

@@ -68,7 +68,7 @@ async function run({
   })
 }
 
-const sendInput = function(
+const sendInput = function (
   inputs: string[],
   child: ChildProcess,
   timeout: number,
@@ -85,7 +85,7 @@ const sendInput = function(
         child.stdin.write(firstInput)
       }
     } catch (error) {
-      console.log('%O', error)
+      ux.print('%O' + error)
     }
 
     sendInput(remainingInputs, child, timeout)
@@ -95,7 +95,7 @@ const sendInput = function(
 const cleanup = async (command: string) => {
   try {
     await cleanupFn[command]()
-    console.log('cleanup endpoint hit successfully')
+    ux.print('cleanup endpoint hit successfully')
   } catch (err) {
     console.error({ err })
   }

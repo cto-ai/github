@@ -13,7 +13,7 @@ const cleanRepoCreate = async () => {
     const originUrl = gitconfig['remote "origin"'].url
     const github = await getGithub()
     if (!originUrl.includes('github')) {
-      console.log(
+      ux.print(
         `❗ This repo's remote "origin" is not currently set for a Github repo`,
       )
       process.exit()
@@ -64,7 +64,7 @@ const cleanIssueCreate = async () => {
     const originUrl = gitconfig['remote "origin"'].url
     const github = await getGithub()
     if (!originUrl.includes('github')) {
-      console.log(
+      ux.print(
         `❗ This repo's remote "origin" is not currently set for a Github repo`,
       )
       process.exit()

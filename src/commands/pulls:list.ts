@@ -1,14 +1,14 @@
+import { Question } from '@cto.ai/inquirer'
 import { sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
-import * as fuzzy from 'fuzzy'
-import { Question } from '@cto.ai/inquirer'
 import Debug from 'debug'
-import { CommandOptions } from '../types/Config'
-import { getGithub } from '../helpers/getGithub'
-import { PullsListFuzzy, PullsListValue } from '../types/PullsTypes'
-import { AnsSelectPull } from '../types/Answers'
-import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import * as fuzzy from 'fuzzy'
 import { ParseAndHandleError } from '../errors'
+import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import { getGithub } from '../helpers/getGithub'
+import { AnsSelectPull } from '../types/Answers'
+import { CommandOptions } from '../types/Config'
+import { PullsListFuzzy, PullsListValue } from '../types/PullsTypes'
 
 let formattedList = []
 

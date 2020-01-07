@@ -1,25 +1,20 @@
-import { ux, sdk } from '@cto.ai/sdk'
+import { AutoCompleteQuestion, CheckboxQuestion } from '@cto.ai/inquirer'
+import { sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
-import { LABELS } from '../constants'
-import { getGithub } from '../helpers/getGithub'
-import { execPromisified } from '../helpers/execPromisified'
-import { checkForLocalBranch, makeInitialCommit } from '../helpers/git'
-import { CheckboxQuestion } from '@cto.ai/inquirer'
-import { AutoCompleteQuestion } from '@cto.ai/inquirer'
 import stripAnsi from 'strip-ansi'
-import { CommandOptions } from '../types/Config'
-import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
-import {
-  IssueSelection,
-  IssueSelectionItem,
-  HelpInfo,
-  DataForFilter,
-} from '../types/IssueTypes'
-import { AnsFilterSelect, AnsIssueSelect } from '../types/Answers'
+import { LABELS } from '../constants'
 import { ParseAndHandleError } from '../errors'
+import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import { execPromisified } from '../helpers/execPromisified'
+import { getGithub } from '../helpers/getGithub'
+import { checkForLocalBranch, makeInitialCommit } from '../helpers/git'
+import { AnsFilterSelect, AnsIssueSelect } from '../types/Answers'
+import { CommandOptions } from '../types/Config'
+import { DataForFilter, HelpInfo, IssueSelection, IssueSelectionItem } from '../types/IssueTypes'
 
 const debug = Debug('github:issueSearch')
+const yargs = require('yargs')
 
 const filterSelectPrompt = (
   list: string[],
@@ -148,7 +143,7 @@ export const issueSearch = async (cmdOptions: CommandOptions) => {
     let q = `is:issue+repo:${owner}/${repo}`
 
     //checks for query flag: -q || --query
-    const argv = sdk.yargs.alias('q', 'query').nargs('q', 1).argv
+    const argv = yargs.alias('q', 'query').nargs('q', 1).argv
     if (!argv.q) {
       const checkBoxlist = [
         {

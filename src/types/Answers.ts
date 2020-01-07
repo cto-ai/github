@@ -1,16 +1,7 @@
-import { SelectedRepoClone } from './RepoTypes'
+import { IssueListValue, IssueStartValue, IssueValue, RepoContributor } from './IssueTypes'
+import { LabelKeys, LabelRemoveFormattedItemValue, RepoWithOwnerAndName } from './Labels'
 import { PullsListValue } from './PullsTypes'
-import {
-  LabelRemoveFormattedItemValue,
-  RepoWithOwnerAndName,
-  LabelKeys,
-} from './Labels'
-import {
-  IssueStartValue,
-  IssueListValue,
-  RepoContributor,
-  IssueValue,
-} from './IssueTypes'
+import { SelectedRepoClone } from './RepoTypes'
 
 export interface AnsIssueTitleType {
   title: string

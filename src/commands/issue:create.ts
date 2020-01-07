@@ -1,14 +1,13 @@
 import { sdk, ux } from '@cto.ai/sdk'
+import Debug from 'debug'
 import * as fs from 'fs'
 import * as path from 'path'
-import Debug from 'debug'
+import { ParseAndHandleError } from '../errors'
 import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { getGithub } from '../helpers/getGithub'
-import { CommandOptions } from '../types/Config'
-import { AnsIssueTitleType, AnsIssueDescription } from '../types/Answers'
-import { setConfig } from '../helpers/config'
-import { ParseAndHandleError } from '../errors'
 import { hasIssueEnabled } from '../helpers/git'
+import { AnsIssueDescription, AnsIssueTitleType } from '../types/Answers'
+import { CommandOptions } from '../types/Config'
 
 const debug = Debug('github:issueCreate')
 

@@ -1,9 +1,9 @@
+import { Question } from '@cto.ai/inquirer'
 import { ux } from '@cto.ai/sdk'
 import Debug from 'debug'
-import { Question } from '@cto.ai/inquirer'
-import { AnsToken } from '../types/Answers'
-import { setConfig } from '../helpers/config'
 import { ParseAndHandleError } from '../errors'
+import { setConfig } from '../helpers/config'
+import { AnsToken } from '../types/Answers'
 
 const debug = Debug('github:tokenUpdate')
 

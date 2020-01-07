@@ -1,27 +1,15 @@
-import * as Github from '@octokit/rest'
-import { ux, sdk } from '@cto.ai/sdk'
-import * as fuzzy from 'fuzzy'
-import Debug from 'debug'
-import { getGithub } from '../helpers/getGithub'
-import {
-  getAllLabelsForRepo,
-  editLabel,
-  findReposWithSelectedLabel,
-} from '../helpers/labels'
-import { CommandOptions } from '../types/Config'
-import {
-  LabelEditFormattedItem,
-  LabelKeys,
-  RepoWithOwnerAndName,
-} from '../types/Labels'
 import { Question } from '@cto.ai/inquirer'
-import {
-  AnsSelectLabelEdit,
-  AnsSelectYesNo,
-  AnsSelectReposForLabel,
-} from '../types/Answers'
-import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import { sdk, ux } from '@cto.ai/sdk'
+import * as Github from '@octokit/rest'
+import Debug from 'debug'
+import * as fuzzy from 'fuzzy'
 import { ParseAndHandleError } from '../errors'
+import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import { getGithub } from '../helpers/getGithub'
+import { editLabel, findReposWithSelectedLabel, getAllLabelsForRepo } from '../helpers/labels'
+import { AnsSelectLabelEdit, AnsSelectReposForLabel, AnsSelectYesNo } from '../types/Answers'
+import { CommandOptions } from '../types/Config'
+import { LabelEditFormattedItem, LabelKeys, RepoWithOwnerAndName } from '../types/Labels'
 
 const debug = Debug('github:labelEdit')
 

@@ -1,27 +1,15 @@
-import * as Github from '@octokit/rest'
-import { sdk, ux } from '@cto.ai/sdk'
-import * as fuzzy from 'fuzzy'
 import { Question } from '@cto.ai/inquirer'
+import { sdk, ux } from '@cto.ai/sdk'
+import * as Github from '@octokit/rest'
 import Debug from 'debug'
-import { getGithub } from '../helpers/getGithub'
-import {
-  getAllLabelsForRepo,
-  removeLabel,
-  findReposWithSelectedLabel,
-} from '../helpers/labels'
-import { CommandOptions } from '../types/Config'
-import {
-  LabelRemoveFormattedItem,
-  LabelRemoveFormattedItemValue,
-  RepoWithOwnerAndName,
-} from '../types/Labels'
-import {
-  AnsSelectLabelRemove,
-  AnsSelectYesNo,
-  AnsSelectReposForLabel,
-} from '../types/Answers'
-import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import * as fuzzy from 'fuzzy'
 import { ParseAndHandleError } from '../errors'
+import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import { getGithub } from '../helpers/getGithub'
+import { findReposWithSelectedLabel, getAllLabelsForRepo, removeLabel } from '../helpers/labels'
+import { AnsSelectLabelRemove, AnsSelectReposForLabel, AnsSelectYesNo } from '../types/Answers'
+import { CommandOptions } from '../types/Config'
+import { LabelRemoveFormattedItem, LabelRemoveFormattedItemValue, RepoWithOwnerAndName } from '../types/Labels'
 
 const debug = Debug('github:labelRemove')
 

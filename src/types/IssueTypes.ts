@@ -1,4 +1,4 @@
-import { AutoCompleteQuestion } from '@cto.ai/inquirer'
+import { AutoCompleteQuestion } from '@cto.ai/inquirer';
 
 export interface IssueListValue {
   title: string

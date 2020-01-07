@@ -1,19 +1,19 @@
+import { Question } from '@cto.ai/inquirer'
 import { sdk, ux } from '@cto.ai/sdk'
+import * as Github from '@octokit/rest'
+import Debug from 'debug'
 import * as fs from 'fs-extra'
 import * as path from 'path'
-import * as Github from '@octokit/rest'
 import simplegit from 'simple-git/promise'
-import { Question } from '@cto.ai/inquirer'
-import Debug from 'debug'
+import { LABELS } from '../constants'
+import { ParseAndHandleError } from '../errors'
+import { execPromisified } from '../helpers/execPromisified'
 import { getGithub } from '../helpers/getGithub'
 import { insertTokenInUrl } from '../helpers/insertTokenInUrl'
-import { execPromisified } from '../helpers/execPromisified'
-import { saveRemoteRepoToConfig } from '../helpers/saveRemoteRepoToConfig'
-import { LABELS } from '../constants'
 import { createLabels } from '../helpers/labels'
+import { saveRemoteRepoToConfig } from '../helpers/saveRemoteRepoToConfig'
 import { AnsRepoCreate } from '../types/Answers'
 import { CommandOptions } from '../types/Config'
-import { ParseAndHandleError } from '../errors'
 
 const debug = Debug('github:repoCreate')
 
@@ -136,7 +136,7 @@ const createGithubRepo = async (
     const response = await github.repos.createInOrg({ org, ...options })
     return response
   } catch (err) {
-    console.log(err)
+    ux.print(err)
     ux.spinner.stop('failed!')
     await ParseAndHandleError(err, 'createRepo()')
   }
@@ -155,7 +155,7 @@ export const repoCreate = async ({ accessToken }: CommandOptions) => {
 
     const answers = await getRepoInfoFromUser(orgs, personalAccountLogin)
 
-    ux.spinner.start('Creating repo')
+    await ux.spinner.start('Creating repo')
 
     const {
       data: { clone_url, name, owner },

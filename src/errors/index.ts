@@ -1,10 +1,6 @@
 import { sdk, ux } from '@cto.ai/sdk'
-import {
-  CREDS_ERROR_MSG,
-  NOT_GIT_REPO_ERROR_MSG,
-  NO_CMD_ERROR_MSG,
-} from './constants'
 import { setConfig } from '@cto.ai/sdk/dist/sdk'
+import { CREDS_ERROR_MSG, NOT_GIT_REPO_ERROR_MSG, NO_CMD_ERROR_MSG } from './constants'
 export * from './credentials'
 
 const ERROR_TAGS = ['github', 'error handler']
@@ -55,7 +51,7 @@ export const ParseAndHandleError = async (
     sdk.log(`😅 The label ${labelName} does not exist for this repo!`)
     process.exit()
   } else if (err.status && err.status === 404) {
-    console.log(err)
+    ux.print(err)
     sdk.log(
       `😅 This Github repo either does not exist, or you do not have user permissions to access this repo's details!`,
     )
@@ -75,7 +71,7 @@ export const ParseAndHandleError = async (
     err.status === 422 &&
     command === 'Creating Pull Request'
   ) {
-    console.log(err)
+    ux.print(err)
     sdk.log(
       `❌ Creating pull request failed due to validation error. \n🏷  Make sure to commit and push code using ${callOutCyan(
         'issue:save',
@@ -89,7 +85,7 @@ export const ParseAndHandleError = async (
     process.exit()
   } else {
     // base case
-    console.log(err)
+    ux.print(err)
     // process.exit()
   }
 }

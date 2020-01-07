@@ -1,9 +1,9 @@
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
-import { RepoLabel } from '../types/RepoTypes'
-import { LabelKeys, RepoWithOwnerAndName } from '../types/Labels'
-import { listReposForOrg } from '../helpers/git'
 import { ParseAndHandleError } from '../errors'
+import { listReposForOrg } from '../helpers/git'
+import { LabelKeys, RepoWithOwnerAndName } from '../types/Labels'
+import { RepoLabel } from '../types/RepoTypes'
 
 const debug = Debug('github:labelHelper')
 /**

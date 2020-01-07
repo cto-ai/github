@@ -4,7 +4,7 @@ const asyncPipe = (...fns: Function[]) => (param?: any) =>
   fns.reduce(async (acc, fn) => fn(await acc), param)
 
 const _trace = (msg: string) => (x: any) => {
-  console.log(msg, x)
+  ux.print(msg + ' ' + x)
   return x
 }
 

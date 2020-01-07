@@ -1,11 +1,11 @@
-import { sdk, ux } from '@cto.ai/sdk'
-import branch from 'git-branch'
-import Debug from 'debug'
 import { Question } from '@cto.ai/inquirer'
+import { sdk, ux } from '@cto.ai/sdk'
+import Debug from 'debug'
+import branch from 'git-branch'
+import { ParseAndHandleError } from '../errors'
 import { execPromisified } from '../helpers/execPromisified'
 import { checkLocalChanges } from '../helpers/git'
 import { AnsIssueSave } from '../types/Answers'
-import { ParseAndHandleError } from '../errors'
 
 const debug = Debug('github:issueSave')
 

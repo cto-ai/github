@@ -1,18 +1,13 @@
+import { AutoCompleteQuestion, Question } from '@cto.ai/inquirer'
+import { sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
-import { ux, sdk } from '@cto.ai/sdk'
-import { Question, AutoCompleteQuestion } from '@cto.ai/inquirer'
 import Debug from 'debug'
-import { getGithub } from '../helpers/getGithub'
-import { getAllLabelsForRepo, createLabels } from '../helpers/labels'
-import {
-  LabelEditFormattedItem,
-  LabelKeys,
-  RepoWithOwnerAndName,
-  RepoWithLabelsToAdd,
-} from '../types/Labels'
-import { AnsBaseRepo, AnsSyncRepo } from '../types/Answers'
-import { listRepos } from '../helpers/git'
 import { ParseAndHandleError } from '../errors'
+import { getGithub } from '../helpers/getGithub'
+import { listRepos } from '../helpers/git'
+import { createLabels, getAllLabelsForRepo } from '../helpers/labels'
+import { AnsBaseRepo, AnsSyncRepo } from '../types/Answers'
+import { LabelEditFormattedItem, LabelKeys, RepoWithLabelsToAdd, RepoWithOwnerAndName } from '../types/Labels'
 
 const debug = Debug('github:labelSync')
 

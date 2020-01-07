@@ -1,9 +1,9 @@
 const parse = require('parse-git-config')
-import { ux, sdk } from '@cto.ai/sdk'
+import { sdk, ux } from '@cto.ai/sdk'
+import { ParseAndHandleError } from '../errors'
 import { CommandOptions } from '../types/Config'
 import { execPromisified } from './execPromisified'
 import { saveRemoteRepoToConfig } from './saveRemoteRepoToConfig'
-import { ParseAndHandleError } from '../errors'
 
 const REPO_OWNER_REGEX = /(?<=github\.com(\/|:))[a-z0-9A-Z]+/g
 const REPO_NAME_REGEX = /(?<=github\.com(\/|:)[a-z0-9A-Z]+\/)[a-z0-9A-Z-]+/g
