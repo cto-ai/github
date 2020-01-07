@@ -1,10 +1,8 @@
-import { getGithub } from '../../src/helpers/getGithub'
-import { filterForRepoInfo } from '../../src/helpers/checkCurrentRepo'
-import { execPromisified } from '../../src/helpers/execPromisified'
-import { getConfig, setConfig } from '../../src/helpers/config'
-import { sdk } from '@cto.ai/sdk'
 import fs from 'fs'
 import parse from 'parse-git-config'
+import { filterForRepoInfo } from '../../src/helpers/checkCurrentRepo'
+import { execPromisified } from '../../src/helpers/execPromisified'
+import { getGithub } from '../../src/helpers/getGithub'
 import { TEAM_NAME_IDENTIFIER } from './constants'
 
 const cleanRepoCreate = async () => {
@@ -13,7 +11,7 @@ const cleanRepoCreate = async () => {
     const originUrl = gitconfig['remote "origin"'].url
     const github = await getGithub()
     if (!originUrl.includes('github')) {
-      ux.print(
+      await ux.print(
         `❗ This repo's remote "origin" is not currently set for a Github repo`,
       )
       process.exit()
@@ -64,7 +62,7 @@ const cleanIssueCreate = async () => {
     const originUrl = gitconfig['remote "origin"'].url
     const github = await getGithub()
     if (!originUrl.includes('github')) {
-      ux.print(
+      await ux.print(
         `❗ This repo's remote "origin" is not currently set for a Github repo`,
       )
       process.exit()

@@ -1,6 +1,6 @@
-import { run, cleanup, sleep, signin, signout } from '../utils/cmd'
-import { ENTER, A } from '../utils/constants'
 import { execPromisified } from '../../src/helpers/execPromisified'
+import { cleanup, run, sleep } from '../utils/cmd'
+import { A, ENTER } from '../utils/constants'
 
 beforeAll(async () => {
   // await signin()

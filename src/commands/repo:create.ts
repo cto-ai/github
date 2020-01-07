@@ -136,7 +136,7 @@ const createGithubRepo = async (
     const response = await github.repos.createInOrg({ org, ...options })
     return response
   } catch (err) {
-    ux.print(err)
+    await ux.print(err)
     ux.spinner.stop('failed!')
     await ParseAndHandleError(err, 'createRepo()')
   }
