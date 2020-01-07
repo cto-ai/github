@@ -6,7 +6,8 @@ const asyncPipe = (...fns: Function[]) => (param?: any) =>
   fns.reduce(async (acc, fn) => fn(await acc), param)
 
 const _trace = (msg: string) => (x: any) => {
-  await ux.print(msg + ' ' + x)
+  //TODO: this should/should not be async
+  ux.print(msg + ' ' + x)
   return x
 }
 

@@ -4,6 +4,7 @@ import { filterForRepoInfo } from '../../src/helpers/checkCurrentRepo'
 import { execPromisified } from '../../src/helpers/execPromisified'
 import { getGithub } from '../../src/helpers/getGithub'
 import { TEAM_NAME_IDENTIFIER } from './constants'
+import { ux } from '@cto.ai/sdk'
 
 const cleanRepoCreate = async () => {
   try {

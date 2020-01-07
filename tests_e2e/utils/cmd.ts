@@ -81,7 +81,8 @@ const sendInput = function (
         child.stdin.write(firstInput)
       }
     } catch (error) {
-      await ux.print('%O' + error)
+      //TODO: this should/should not be async
+      ux.print('%O' + error)
     }
 
     sendInput(remainingInputs, child, timeout)
