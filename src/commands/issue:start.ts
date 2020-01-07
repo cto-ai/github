@@ -1,5 +1,4 @@
-import { Question } from '@cto.ai/inquirer'
-import { sdk, ux } from '@cto.ai/sdk'
+import { Question, sdk, ux } from '@cto.ai/sdk'
 import Debug from 'debug'
 import { LABELS } from '../constants'
 import { ParseAndHandleError } from '../errors'

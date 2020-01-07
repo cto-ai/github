@@ -1,5 +1,4 @@
-import { AutoCompleteQuestion, CheckboxQuestion } from '@cto.ai/inquirer'
-import { sdk, ux } from '@cto.ai/sdk'
+import { Question, sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import stripAnsi from 'strip-ansi'
@@ -18,7 +17,7 @@ const yargs = require('yargs')
 
 const filterSelectPrompt = (
   list: string[],
-): AutoCompleteQuestion<AnsFilterSelect>[] => [
+): Question<AnsFilterSelect>[] => [
   {
     type: 'autocomplete',
     name: 'filter',

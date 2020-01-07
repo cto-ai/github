@@ -1,5 +1,4 @@
-import { Question } from '@cto.ai/inquirer'
-import { sdk, ux } from '@cto.ai/sdk'
+import { Question, sdk, ux } from '@cto.ai/sdk'
 import Debug from 'debug'
 import branch from 'git-branch'
 import { ParseAndHandleError } from '../errors'
@@ -13,7 +12,7 @@ const question: Question<AnsIssueSave> = {
   type: 'input',
   name: 'message',
   message: `\n📝 Please enter a commit message:\n`,
-  afterMessage: `Message: `,
+  // afterMessage: `Message: `,
   validate: input => {
     if (input === '') {
       return ' Commit message cannot be empty!'

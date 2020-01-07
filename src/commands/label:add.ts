@@ -1,5 +1,4 @@
-import { Question } from '@cto.ai/inquirer'
-import { sdk, ux } from '@cto.ai/sdk'
+import { Question, sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import { ParseAndHandleError } from '../errors'
@@ -18,7 +17,7 @@ const promptUserInput = async () => {
       type: 'input',
       name: 'name',
       message: `\nPlease enter your label name:`,
-      afterMessage: `Name: `,
+      // afterMessage: `Name: `,
       validate: input => {
         if (input === '') {
           return ' Label name cannot be blank!'
@@ -31,7 +30,7 @@ const promptUserInput = async () => {
       type: 'input',
       name: 'description',
       message: `\nPlease enter your label description:`,
-      afterMessage: `Description: `,
+      // afterMessage: `Description: `,
       validate: input => {
         if (input === '') {
           return ' Label description cannot be blank!'
@@ -46,7 +45,7 @@ const promptUserInput = async () => {
       type: 'input',
       name: 'color',
       message: `\nProvide a valid hex code for your label color (without #):`,
-      afterMessage: `Color: `,
+      // afterMessage: `Color: `,
       validate: input => {
         if (!isValidColor(input)) {
           return ' That is not a valid hex code!'

@@ -3,7 +3,6 @@ import Debug from 'debug'
 import { CredentialsError, ParseAndHandleError } from '../errors'
 import { getConfig } from './config'
 
-
 const debug = Debug('github:getGithub')
 
 export const getToken = async () => {

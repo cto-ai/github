@@ -1,5 +1,4 @@
-import { Question } from '@cto.ai/inquirer'
-import { sdk, ux } from '@cto.ai/sdk'
+import { Question, sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import * as fuzzy from 'fuzzy'
@@ -82,21 +81,21 @@ const promptLabelEdit = async ({
       name: 'name',
       message: 'Enter a new name for the label:',
       default: name,
-      afterMessage: `${ux.colors.reset.green('✓')} Name`,
+      // afterMessage: `${ux.colors.reset.green('✓')} Name`,
     },
     {
       type: 'input',
       name: 'description',
       message: 'Enter a new description for the label:',
       default: description,
-      afterMessage: `${ux.colors.reset.green('✓')} Description`,
+      // afterMessage: `${ux.colors.reset.green('✓')} Description`,
     },
     {
       type: 'input',
       name: 'color',
       message: 'Enter a new color for the label:',
       default: color,
-      afterMessage: `${ux.colors.reset.green('✓')} Color`,
+      // afterMessage: `${ux.colors.reset.green('✓')} Color`,
     },
   ]
 

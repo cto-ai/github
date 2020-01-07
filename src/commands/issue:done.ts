@@ -1,5 +1,4 @@
-import { Question } from '@cto.ai/inquirer'
-import { sdk, ux } from '@cto.ai/sdk'
+import { Question, sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import branch from 'git-branch'
@@ -16,13 +15,13 @@ const pullRequestQuestions: Question<AnsPullRequest>[] = [
     type: 'input',
     name: 'title',
     message: 'Enter a title for the Pull Request:',
-    afterMessage: `${ux.colors.reset.green('✓')} Title`,
+    // afterMessage: `${ux.colors.reset.green('✓')} Title`,
   },
   {
     type: 'input',
     name: 'comment',
     message: 'Enter a comment or description for your Pull Request',
-    afterMessage: `${ux.colors.reset.green('✓')} Comment`,
+    // afterMessage: `${ux.colors.reset.green('✓')} Comment`,
   },
 ]
 

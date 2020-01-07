@@ -44,7 +44,7 @@ export const issueCreate = async (cmdOptions: CommandOptions) => {
         type: 'input',
         name: 'title',
         message: `\n📝 Please enter your issue title:`,
-        afterMessage: `Title: `,
+        // afterMessage: `Title: `,
       },
       {
         type: 'list',
@@ -53,7 +53,7 @@ export const issueCreate = async (cmdOptions: CommandOptions) => {
           'Your default editor will be opened to allow editing of the issue details.',
         )}`,
         choices: fs.readdirSync(templateDir),
-        afterMessage: `Type: `,
+        // afterMessage: `Type: `,
       },
     ])
 

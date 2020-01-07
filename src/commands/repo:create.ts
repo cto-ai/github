@@ -1,5 +1,4 @@
-import { Question } from '@cto.ai/inquirer'
-import { sdk, ux } from '@cto.ai/sdk'
+import { Question, sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import * as fs from 'fs-extra'
@@ -72,14 +71,14 @@ const getRepoInfoFromUser = async (
       name: 'org',
       message: `\nPlease select the organization of your repo →`,
       choices: orgsList,
-      afterMessage: `${ux.colors.reset.green('✓')} Org`,
+      // afterMessage: `${ux.colors.reset.green('✓')} Org`,
     },
     {
       type: 'input',
       name: 'name',
       message: `\nPlease enter the name of the repo →
       \n${ux.colors.white('📝 Enter Name')}`,
-      afterMessage: `${ux.colors.reset.green('✓')} Name`,
+      // afterMessage: `${ux.colors.reset.green('✓')} Name`,
       validate: input => {
         if (input === '') {
           return 'The repo name cannot be blank!'
@@ -93,7 +92,7 @@ const getRepoInfoFromUser = async (
       name: 'description',
       message: `\nPlease enter the description of the repo →
       \n${ux.colors.white('📝 Enter Description')}`,
-      afterMessage: `${ux.colors.reset.green('✓')} Description`,
+      // afterMessage: `${ux.colors.reset.green('✓')} Description`,
     },
     {
       type: 'list',
@@ -103,7 +102,7 @@ const getRepoInfoFromUser = async (
         { name: '🔐 private', value: 'private' },
         { name: '🌎 public', value: 'public' },
       ],
-      afterMessage: `${ux.colors.reset.green('✓')} Type`,
+      // afterMessage: `${ux.colors.reset.green('✓')} Type`,
     },
   ]
   const answers = await ux.prompt<AnsRepoCreate>(questions)

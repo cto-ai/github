@@ -22,8 +22,8 @@ export const promptForToken = async () => {
         `'admin'`,
       )} scopes to grant to this access token.\n\n• Copy the access token and provide it below 👇.`,
     )} \n\n\n🔑 Please enter your github token:`,
-    afterMessage: `${ux.colors.reset.green('✓')} Access Token`,
-    afterMessageAppend: `${ux.colors.reset(' added!')}`,
+    // afterMessage: `${ux.colors.reset.green('✓')} Access Token`,
+    // afterMessageAppend: `${ux.colors.reset(' added!')}`,
     validate: (input: string) =>
       !!input.trim() || 'Please enter a valid Github Access Token',
   }
