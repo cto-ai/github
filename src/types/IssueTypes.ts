@@ -1,4 +1,4 @@
-import { AutoCompleteQuestion } from '@cto.ai/inquirer';
+import { Question } from '@cto.ai/sdk';
 
 export interface IssueListValue {
   title: string
@@ -53,5 +53,5 @@ export interface HelpInfo {
 
 export interface DataForFilter {
   name: string
-  prompt: AutoCompleteQuestion<any>[]
+  prompt: Question<any>[]
 }

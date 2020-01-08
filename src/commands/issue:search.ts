@@ -29,7 +29,7 @@ const filterSelectPrompt = (
 
 const issueSelectPrompt = (
   list: IssueSelection[],
-): AutoCompleteQuestion<AnsIssueSelect>[] => [
+): Question<AnsIssueSelect>[] => [
   {
     type: 'autocomplete',
     name: 'issue',
@@ -39,14 +39,14 @@ const issueSelectPrompt = (
   },
 ]
 
-const checkboxPrompt = (list): CheckboxQuestion<AnsFilterSelect>[] => {
+const checkboxPrompt = (list): Question<AnsFilterSelect>[] => {
   return [
     {
       type: 'checkbox',
       name: 'issueFilter',
       message: 'Please select the filter',
       choices: list,
-      pageSize: process.stdout.rows,
+      // pageSize: process.stdout.rows,
     },
   ]
 }

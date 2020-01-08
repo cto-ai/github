@@ -12,14 +12,6 @@ const question: Question<AnsIssueSave> = {
   type: 'input',
   name: 'message',
   message: `\n📝 Please enter a commit message:\n`,
-  // afterMessage: `Message: `,
-  validate: input => {
-    if (input === '') {
-      return ' Commit message cannot be empty!'
-    } else {
-      return true
-    }
-  },
 }
 
 export const issueSave = async () => {

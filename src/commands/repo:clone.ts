@@ -72,7 +72,7 @@ const selectRepo = async (): Promise<SelectedRepoClone> => {
   const list: Question<AnsRepoCloneSelect> = {
     type: 'autocomplete',
     name: 'repo',
-    pageSize: 7,
+    // pageSize: 7,
     message: 'Select a repo to clone. Repos with 🤖 are already cloned.\n',
     source: autocompleteSearch,
     bottomContent: '',

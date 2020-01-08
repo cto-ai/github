@@ -5,6 +5,7 @@ import { ParseAndHandleError } from '../errors'
 import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { getGithub } from '../helpers/getGithub'
 import { createLabels } from '../helpers/labels'
+import { validatedPrompt } from '../helpers/validatedPrompts'
 import { AnsSelectReposForLabel, AnsSelectYesNo } from '../types/Answers'
 import { CommandOptions } from '../types/Config'
 import { LabelKeys } from '../types/Labels'
@@ -17,46 +18,47 @@ const promptUserInput = async () => {
       type: 'input',
       name: 'name',
       message: `\nPlease enter your label name:`,
-      // afterMessage: `Name: `,
-      validate: input => {
-        if (input === '') {
-          return ' Label name cannot be blank!'
-        } else {
-          return true
-        }
-      },
     },
     {
       type: 'input',
       name: 'description',
       message: `\nPlease enter your label description:`,
       // afterMessage: `Description: `,
-      validate: input => {
-        if (input === '') {
-          return ' Label description cannot be blank!'
-        } else if (input.length > 100) {
-          return ' Label description must be under 100 characters in length!'
-        } else {
-          return true
-        }
-      },
+      // validate: input => {
+      //   if (input.length > 100) {
+      //     return ' Label description must be under 100 characters in length!'
+      //   } else {
+      //     return true
+      //   }
+      // },
     },
     {
       type: 'input',
       name: 'color',
       message: `\nProvide a valid hex code for your label color (without #):`,
       // afterMessage: `Color: `,
-      validate: input => {
-        if (!isValidColor(input)) {
-          return ' That is not a valid hex code!'
-        } else {
-          return true
-        }
-      },
+      // validate: input => {
+      //   if (!isValidColor(input)) {
+      //     return ' That is not a valid hex code!'
+      //   } else {
+      //     return true
+      //   }
+      // },
     },
   ]
 
-  const answers = await ux.prompt<LabelKeys>(questions)
+  //TODO: not sure if setting errMess in validation function works. Will have to test.
+  // let errMess: string = ""
+  const answers = await validatedPrompt(questions, (response: any) => {
+    if (response[questions[1].name].length > 100) {
+      // errMess = ' Label description must be under 100 characters in length!'
+      return false
+    } else if (!isValidColor(response[questions[2].name])) {
+      // errMess = ' That is not a valid hex code!'
+      return false
+    }
+    return true
+  }, 'Label description must be under 100 characters in length, and colour must be a valid hex code!')
   return answers
 }
 

@@ -1,8 +1,8 @@
-import { Question } from '@cto.ai/inquirer'
-import { ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import Debug from 'debug'
 import { ParseAndHandleError } from '../errors'
 import { setConfig } from '../helpers/config'
+import { validatedPrompt } from '../helpers/validatedPrompts'
 import { AnsToken } from '../types/Answers'
 
 const debug = Debug('github:tokenUpdate')
@@ -24,10 +24,13 @@ export const promptForToken = async () => {
     )} \n\n\n🔑 Please enter your github token:`,
     // afterMessage: `${ux.colors.reset.green('✓')} Access Token`,
     // afterMessageAppend: `${ux.colors.reset(' added!')}`,
-    validate: (input: string) =>
-      !!input.trim() || 'Please enter a valid Github Access Token',
+    // validate: (input: string) =>
+    //   !!input.trim() || 'Please enter a valid Github Access Token',
   }
-  return await ux.prompt<AnsToken>(question)
+  // return await ux.prompt<AnsToken>(question)
+  return await validatedPrompt(question, (input: any) => {
+    return !!input[question.name].trim() ? false : true
+  }, 'Please enter a valid Github Access Token')
 }
 
 export const updateAccessToken = async () => {

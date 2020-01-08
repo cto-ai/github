@@ -78,14 +78,6 @@ const getRepoInfoFromUser = async (
       name: 'name',
       message: `\nPlease enter the name of the repo →
       \n${ux.colors.white('📝 Enter Name')}`,
-      // afterMessage: `${ux.colors.reset.green('✓')} Name`,
-      validate: input => {
-        if (input === '') {
-          return 'The repo name cannot be blank!'
-        } else {
-          return true
-        }
-      },
     },
     {
       type: 'input',
@@ -98,10 +90,11 @@ const getRepoInfoFromUser = async (
       type: 'list',
       name: 'privateOrPublic',
       message: 'Do you want to create a public repo or a private repo?',
-      choices: [
-        { name: '🔐 private', value: 'private' },
-        { name: '🌎 public', value: 'public' },
-      ],
+      // choices: [
+      //   { name: '🔐 private', value: 'private' },
+      //   { name: '🌎 public', value: 'public' },
+      // ],
+      choices: ['private', 'public']
       // afterMessage: `${ux.colors.reset.green('✓')} Type`,
     },
   ]

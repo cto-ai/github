@@ -1,5 +1,4 @@
-import { AutoCompleteQuestion, Question } from '@cto.ai/inquirer'
-import { sdk, ux } from '@cto.ai/sdk'
+import { Question, sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import { ParseAndHandleError } from '../errors'
@@ -39,14 +38,14 @@ const formatList = (
 
 const selectBaseRepoPrompt = (
   repoList: RepoWithOwnerAndName[],
-): AutoCompleteQuestion<AnsBaseRepo>[] => [
-  {
-    type: 'autocomplete',
-    name: 'baseRepo',
-    message: 'Please select the base repo that you want to sync to.',
-    autocomplete: repoList.map(repo => `${repo.owner}/${repo.repo}`),
-  },
-]
+): Question<AnsBaseRepo>[] => [
+    {
+      type: 'autocomplete',
+      name: 'baseRepo',
+      message: 'Please select the base repo that you want to sync to.',
+      autocomplete: repoList.map(repo => `${repo.owner}/${repo.repo}`),
+    },
+  ]
 
 const selectReposToSync = (
   repoList: RepoWithOwnerAndName[],
