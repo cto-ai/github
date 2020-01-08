@@ -21,13 +21,14 @@ export const validatedPrompt = async (prompt: Question | Questions, validate: (r
 
 //this replicates the SDK 1.x functionality,
 //where you can have a separate display name and actual value returned
-//prompt should be a ListQuestion (the only one that makes sense, really)
+//prompt should be a ListQuestion, AutoCompleteQuestion, CheckboxQuestion
 //name must be unique, as it is used as a key
-//having duplicate name causes undefined behaviour (probably just returns one of the matching at random)
+//having duplicate names causes undefined behaviour (probably just returns one of the matching at random)
+//prompt.choices will be overwritten, so feel free to set it to anything
 export const keyValPrompt = async (prompt: Question, choices: { name: string, value: any }[]) => {
     //the ListQuestion interface is not actually exported
-    if (prompt?.type != 'list') {
-        throw "prompt must be a ListQuestion!"
+    if (['list', 'autocomplete', 'checkbox'].includes(prompt?.name)) {
+        throw `prompt must be one of [list, autocomplete, checkbox], but got ${prompt?.name}!`
     }
 
     let nameList: string[] = new Array(choices.length)
@@ -40,14 +41,17 @@ export const keyValPrompt = async (prompt: Question, choices: { name: string, va
         keyValMap.set(element.name, element.value)
     }
 
-    //have the use select the key...
+    //have the use select the key(s)...
     const resp = await ux.prompt(Object.assign(prompt, { choices: nameList }))
     if (prompt?.name && resp[prompt?.name]) {
-        //and return the associated value
-        // let retVal = {}
-        // retVal[prompt.name] = keyValMap.get(resp[prompt?.name])
-        // return retVal
-        return { [prompt.name]: keyValMap.get(resp[prompt?.name]) };
+        //and return the associated value(s)
+        if (prompt.type == 'checkbox') {
+            //multiple values
+            return { [prompt.name]: resp[prompt.name].map((currentValue: string) => { keyValMap.get(currentValue) }) }
+        } else {
+            //single value
+            return { [prompt.name]: keyValMap.get(resp[prompt.name]) };
+        }
     } else {
         throw "keyValPrompt: Failed to get the value associated with the key"
     }
