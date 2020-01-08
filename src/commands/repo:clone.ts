@@ -1,16 +1,15 @@
 import { Question, sdk, ux } from '@cto.ai/sdk'
 import Debug from 'debug'
-import * as fuzzy from 'fuzzy'
 import { ParseAndHandleError } from '../errors'
 import { getConfig } from '../helpers/config'
 import { getGithub } from '../helpers/getGithub'
 import { cloneRepo } from '../helpers/git'
 import { insertTokenInUrl } from '../helpers/insertTokenInUrl'
 import { isRepoCloned } from '../helpers/isRepoCloned'
+import { keyValPrompt } from '../helpers/promptUtils'
 import { saveRemoteRepoToConfig } from '../helpers/saveRemoteRepoToConfig'
 import { AnsRepoCloneSelect } from '../types/Answers'
 import { CommandOptions } from '../types/Config'
-import { Fuzzy } from '../types/Fuzzy'
 import { FormattedRepoClone, SelectedRepoClone } from '../types/RepoTypes'
 
 const debug = Debug('github:repoClone')
@@ -48,20 +47,6 @@ const formatList = async (): Promise<FormattedRepoClone[]> => {
   return formattedRepos
 }
 
-/**
- * Does fuzzy search in the list for the matching characters
- *
- * @param {any} _
- * @param {string} [input='']
- * @returns
- */
-const autocompleteSearch = async (_: any, input = '') => {
-  const list = await formatList()
-  const fuzzyResult: Fuzzy[] = await fuzzy.filter(input, list, {
-    extract: el => el.name,
-  })
-  return fuzzyResult.map(result => result.original)
-}
 
 /**
  * Displays list of repo and returns the repo selected by the user
@@ -74,11 +59,11 @@ const selectRepo = async (): Promise<SelectedRepoClone> => {
     name: 'repo',
     // pageSize: 7,
     message: 'Select a repo to clone. Repos with 🤖 are already cloned.\n',
-    source: autocompleteSearch,
-    bottomContent: '',
+    choices: [],
+    // bottomContent: '',
   }
   // assign type SelectedRepoClone to remoteRepo
-  const { repo } = await ux.prompt<AnsRepoCloneSelect>(list)
+  const { repo } = await keyValPrompt(list, await formatList())
   const { owner, name } = repo
   const remoteRepos = (await getConfig('remoteRepos')) || []
 

@@ -1,15 +1,22 @@
 import { Question, sdk, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
-import * as fuzzy from 'fuzzy'
 import { ParseAndHandleError } from '../errors'
 import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { getGithub } from '../helpers/getGithub'
+import { keyValPrompt } from '../helpers/promptUtils'
 import { AnsSelectPull } from '../types/Answers'
 import { CommandOptions } from '../types/Config'
-import { PullsListFuzzy, PullsListValue } from '../types/PullsTypes'
+import { PullsListValue } from '../types/PullsTypes'
 
-let formattedList = []
+let formattedList: {
+  name: string;
+  value: {
+    number: number;
+    title: string;
+    url: string;
+  };
+}[] = []
 
 const debug = Debug('github:pullsList')
 
@@ -34,17 +41,6 @@ const formatList = (pulls: Github.PullsListResponseItem[]) => {
 }
 
 /**
- * Does fuzzy search in the list for the matching characters
- *
- * @param {string} [input='']
- */
-const autocompleteSearch = async (_: any, input = '') => {
-  const fuzzyResult = await fuzzy.filter<PullsListFuzzy>(input, formattedList, {
-    extract: el => el.name,
-  })
-  return fuzzyResult.map(result => result.original)
-}
-/**
  * prompt user to select a pull request
  *
  * @returns {Promise<PullsListValue>}
@@ -56,11 +52,11 @@ const promptPullRequestSelection = async (
     type: 'autocomplete',
     message: `Here's a list of pull requests for ${repo}:`,
     name: 'pullRequest',
-    source: autocompleteSearch,
-    bottomContent: '',
+    choices: [],
+    // bottomContent: '',
   }
 
-  const { pullRequest } = await ux.prompt<AnsSelectPull>(questions)
+  const { pullRequest } = await keyValPrompt(questions, formattedList)
   return pullRequest
 }
 
