@@ -5,7 +5,8 @@ import { ParseAndHandleError } from '../errors'
 import { getGithub } from '../helpers/getGithub'
 import { listRepos } from '../helpers/git'
 import { createLabels, getAllLabelsForRepo } from '../helpers/labels'
-import { AnsBaseRepo, AnsSyncRepo } from '../types/Answers'
+import { keyValPrompt } from '../helpers/promptUtils'
+import { AnsBaseRepo } from '../types/Answers'
 import { LabelEditFormattedItem, LabelKeys, RepoWithLabelsToAdd, RepoWithOwnerAndName } from '../types/Labels'
 
 const debug = Debug('github:labelSync')
@@ -43,33 +44,15 @@ const selectBaseRepoPrompt = (
       type: 'autocomplete',
       name: 'baseRepo',
       message: 'Please select the base repo that you want to sync to.',
-      autocomplete: repoList.map(repo => `${repo.owner}/${repo.repo}`),
+      choices: repoList.map(repo => `${repo.owner}/${repo.repo}`),
     },
   ]
 
-const selectReposToSync = (
-  repoList: RepoWithOwnerAndName[],
-  baseRepo: string,
-): Question<AnsSyncRepo>[] => {
-  const filteredRepoList = repoList.filter(
-    repo => `${repo.owner}/${repo.repo}` !== baseRepo,
-  )
-  return [
-    {
-      type: 'checkbox',
-      name: 'reposToSync',
-      message: 'Select the repos you wish to sync the labels of.',
-      choices: filteredRepoList.map(repo => {
-        return {
-          name: `${repo.owner}/${repo.repo}`,
-          value: {
-            owner: repo.owner,
-            repo: repo.repo,
-          },
-        }
-      }),
-    },
-  ]
+const selectReposToSync: Question = {
+  type: 'checkbox',
+  name: 'reposToSync',
+  message: 'Select the repos you wish to sync the labels of.',
+  choices: [],
 }
 
 const formatRepoList = (
@@ -115,9 +98,18 @@ export const labelSync = async () => {
     const { baseRepo } = await ux.prompt<AnsBaseRepo>(
       selectBaseRepoPrompt(formattedRepoList),
     )
-    const { reposToSync } = await ux.prompt<AnsSyncRepo>(
-      selectReposToSync(formattedRepoList, baseRepo),
-    )
+    const { reposToSync } = await keyValPrompt(selectReposToSync, formattedRepoList
+      .filter(
+        repo => `${repo.owner}/${repo.repo}` !== baseRepo,
+      ).map(repo => {
+        return {
+          name: `${repo.owner}/${repo.repo}`,
+          value: {
+            owner: repo.owner,
+            repo: repo.repo,
+          },
+        }
+      }))
     const { owner, repo } = findRepoObj(formattedRepoList, baseRepo)
     const baseRepoLabelList = await getAllLabelsForRepo(owner, repo, github)
     const formattedBaseRepoLabels = formatList(baseRepoLabelList)

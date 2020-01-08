@@ -6,6 +6,7 @@ import { ParseAndHandleError } from '../errors'
 import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { getGithub } from '../helpers/getGithub'
 import { editLabel, findReposWithSelectedLabel, getAllLabelsForRepo } from '../helpers/labels'
+import { keyValPrompt } from '../helpers/promptUtils'
 import { AnsSelectLabelEdit, AnsSelectReposForLabel, AnsSelectYesNo } from '../types/Answers'
 import { CommandOptions } from '../types/Config'
 import { LabelEditFormattedItem, LabelKeys, RepoWithOwnerAndName } from '../types/Labels'
@@ -62,11 +63,10 @@ const labelSelection = async (): Promise<LabelKeys> => {
     type: 'autocomplete',
     message: 'Choose a label to edit:\n',
     name: 'label',
-    source: autocompleteSearch,
-    bottomContent: '',
+    choices: [],
   }
 
-  const { label } = await ux.prompt<AnsSelectLabelEdit>(questions)
+  const { label } = await keyValPrompt(questions, formattedList)
   return label
 }
 
@@ -123,20 +123,20 @@ const selectRepos = async (
     type: 'checkbox',
     name: 'reposSelected',
     message: 'Select from the list below',
-    choices: filteredRepos.map(repo => {
-      return {
-        name: `${repo.owner}/${repo.repo}`,
-        value: {
-          repo: repo.repo,
-          owner: repo.owner,
-        },
-      }
-    }),
+    choices: [],
   }
 
-  const { reposSelected } = await ux.prompt<AnsSelectReposForLabel>(
-    repoListSelect,
-  )
+  const choices = filteredRepos.map(repo => {
+    return {
+      name: `${repo.owner}/${repo.repo}`,
+      value: {
+        repo: repo.repo,
+        owner: repo.owner,
+      },
+    }
+  })
+
+  const { reposSelected } = await keyValPrompt(repoListSelect, choices)
   return reposSelected
 }
 

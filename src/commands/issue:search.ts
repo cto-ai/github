@@ -8,9 +8,10 @@ import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { execPromisified } from '../helpers/execPromisified'
 import { getGithub } from '../helpers/getGithub'
 import { checkForLocalBranch, makeInitialCommit } from '../helpers/git'
-import { AnsFilterSelect, AnsIssueSelect } from '../types/Answers'
+import { keyValPrompt } from '../helpers/promptUtils'
+import { AnsFilterSelect } from '../types/Answers'
 import { CommandOptions } from '../types/Config'
-import { DataForFilter, HelpInfo, IssueSelection, IssueSelectionItem } from '../types/IssueTypes'
+import { DataForFilter, HelpInfo, IssueSelectionItem } from '../types/IssueTypes'
 
 const debug = Debug('github:issueSearch')
 const yargs = require('yargs')
@@ -18,26 +19,23 @@ const yargs = require('yargs')
 const filterSelectPrompt = (
   list: string[],
 ): Question<AnsFilterSelect>[] => [
-  {
-    type: 'autocomplete',
-    name: 'filter',
-    message: 'Please select the filter',
-    choices: list,
-    // pageSize: process.stdout.rows,
-  },
-]
+    {
+      type: 'autocomplete',
+      name: 'filter',
+      message: 'Please select the filter',
+      choices: list,
+      // pageSize: process.stdout.rows,
+    },
+  ]
 
-const issueSelectPrompt = (
-  list: IssueSelection[],
-): Question<AnsIssueSelect>[] => [
-  {
-    type: 'autocomplete',
-    name: 'issue',
-    message: 'Please select the issue (use ➡️  key to view body)',
-    autocomplete: list,
-    pageSize: process.stdout.rows,
-  },
-]
+const issueSelectPrompt: Question =
+{
+  type: 'autocomplete',
+  name: 'issue',
+  message: 'Please select the issue (use ➡️  key to view body)',
+  choices: [],
+  // pageSize: process.stdout.rows,
+}
 
 const checkboxPrompt = (list): Question<AnsFilterSelect>[] => {
   return [
@@ -240,7 +238,7 @@ ${stateStr}\t ${commentStr}\t ${assigneeStr}\n`
       }
     })
 
-    const { issue } = await ux.prompt(issueSelectPrompt(issueSelectionList))
+    const { issue } = await keyValPrompt(issueSelectPrompt, issueSelectionList)
 
     await ux.spinner.start('🚧 Setting up a branch...')
     const branchName = `${issue.number}-${issue.title.replace(/\s/g, '-')}`

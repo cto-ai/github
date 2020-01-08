@@ -6,12 +6,19 @@ import { ParseAndHandleError } from '../errors'
 import { getConfig } from '../helpers/config'
 import { getGithub } from '../helpers/getGithub'
 import { isRepoCloned } from '../helpers/isRepoCloned'
+import { keyValPrompt } from '../helpers/promptUtils'
 import { AnsIssueList } from '../types/Answers'
 import { IssueListFuzzy, IssueListValue } from '../types/IssueTypes'
 
 const debug = Debug('github:issueList')
 
-let formattedList = []
+let formattedList: {
+  name: string;
+  value: {
+    number: number;
+    title: string;
+  };
+}[] = [] //see formatListRepo()
 
 const formatListRepo = (issues: Github.IssuesListForRepoResponse) => {
   return issues.map(issue => {
@@ -63,10 +70,9 @@ const promptIssueSelection = async (): Promise<IssueListValue> => {
       `🔍 Start work on an issue by running 'ops issue:start'!`,
     )}\n`,
     name: 'issue',
-    source: autocompleteSearch,
-    bottomContent: '',
+    choices: []
   }
-  const { issue } = await ux.prompt<AnsIssueList>(question)
+  const { issue } = await keyValPrompt(question, formattedList)
   return issue
 }
 
