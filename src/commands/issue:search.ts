@@ -22,8 +22,8 @@ const filterSelectPrompt = (
     type: 'autocomplete',
     name: 'filter',
     message: 'Please select the filter',
-    autocomplete: list,
-    pageSize: process.stdout.rows,
+    choices: list,
+    // pageSize: process.stdout.rows,
   },
 ]
 

@@ -111,23 +111,25 @@ export const labelAdd = async (cmdOptions: CommandOptions) => {
       }
 
       if (repos.length > 0) {
+        let repoKV = repos.map(repo => {
+          return {
+            name: repo.name,
+            value: {
+              repo: repo.name,
+              owner: repo.owner.login,
+            },
+          }
+        })
         const repoListSelect: Question<AnsSelectReposForLabel> = {
           type: 'checkbox',
           name: 'reposSelected',
           message: 'Select from the list below',
-          choices: repos.map(repo => {
-            return {
-              name: repo.name,
-              value: {
-                repo: repo.name,
-                owner: repo.owner.login,
-              },
-            }
-          }),
+          choices: repoKV.map((val) => { return val.name }),
         }
-        const { reposSelected } = await ux.prompt<AnsSelectReposForLabel>(
+        const reposSelectedUnmapped: string[] = await ux.prompt(
           repoListSelect,
         )
+        const reposSelected = reposSelectedUnmapped.map((value) => { return repoKV[value] })
 
         try {
           await Promise.all(

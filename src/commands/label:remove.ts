@@ -60,8 +60,9 @@ const labelSelection = async (): Promise<LabelRemoveFormattedItemValue> => {
     type: 'autocomplete',
     message: 'Choose a label to remove:\n',
     name: 'label',
-    source: autocompleteSearch,
-    bottomContent: '',
+    choices: formattedList
+    // source: autocompleteSearch,
+    // bottomContent: '',
   }
 
   const { label } = await ux.prompt<AnsSelectLabelRemove>(questions)
@@ -84,25 +85,32 @@ const promptYesNo = async (): Promise<boolean> => {
 const selectRepos = async (
   filteredRepos: RepoWithOwnerAndName[],
 ): Promise<RepoWithOwnerAndName[]> => {
+  let repoKV = filteredRepos.map(repo => {
+    return {
+      name: `${repo.owner}/${repo.repo}`,
+      value: {
+        repo: repo.repo,
+        owner: repo.owner,
+      },
+    }
+  })
   const repoListSelect: Question<AnsSelectReposForLabel> = {
     type: 'checkbox',
     name: 'reposSelected',
     message: 'Select from the list below',
-    choices: filteredRepos.map(repo => {
-      return {
-        name: `${repo.owner}/${repo.repo}`,
-        value: {
-          repo: repo.repo,
-          owner: repo.owner,
-        },
-      }
+    choices: repoKV.map(repo => {
+      return repo.name
     }),
   }
 
-  const { reposSelected } = await ux.prompt<AnsSelectReposForLabel>(
+  const reposSelectedUnmapped: string[] = await ux.prompt(
     repoListSelect,
   )
-  return reposSelected
+
+  return reposSelectedUnmapped.map((value: string) => {
+    return repoKV.find((repoEntry) => { return repoEntry.name == value }).value
+  })
+  // return reposSelected
 }
 
 export const labelRemove = async (cmdOptions: CommandOptions) => {
