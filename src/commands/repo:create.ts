@@ -10,6 +10,7 @@ import { execPromisified } from '../helpers/execPromisified'
 import { getGithub } from '../helpers/getGithub'
 import { insertTokenInUrl } from '../helpers/insertTokenInUrl'
 import { createLabels } from '../helpers/labels'
+import { keyValPrompt } from '../helpers/promptUtils'
 import { saveRemoteRepoToConfig } from '../helpers/saveRemoteRepoToConfig'
 import { AnsRepoCreate } from '../types/Answers'
 import { CommandOptions } from '../types/Config'
@@ -65,14 +66,14 @@ const getRepoInfoFromUser = async (
       return { name: org.login, value: org.login }
     }),
   ]
+  const orgQuestion: Question = {
+    type: 'list',
+    name: 'org',
+    message: `\nPlease select the organization of your repo →`,
+    choices: [],
+    // afterMessage: `${ux.colors.reset.green('✓')} Org`,
+  }
   const questions: Question<AnsRepoCreate>[] = [
-    {
-      type: 'list',
-      name: 'org',
-      message: `\nPlease select the organization of your repo →`,
-      choices: orgsList,
-      // afterMessage: `${ux.colors.reset.green('✓')} Org`,
-    },
     {
       type: 'input',
       name: 'name',
@@ -98,7 +99,9 @@ const getRepoInfoFromUser = async (
       // afterMessage: `${ux.colors.reset.green('✓')} Type`,
     },
   ]
-  const answers = await ux.prompt<AnsRepoCreate>(questions)
+  const { org } = await keyValPrompt(orgQuestion, orgsList)
+  let answers = await ux.prompt<AnsRepoCreate>(questions)
+  answers.org = org
   return answers
 }
 
