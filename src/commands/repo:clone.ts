@@ -1,4 +1,4 @@
-import { Question, sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import Debug from 'debug'
 import { ParseAndHandleError } from '../errors'
 import { getConfig } from '../helpers/config'
@@ -47,7 +47,6 @@ const formatList = async (): Promise<FormattedRepoClone[]> => {
   return formattedRepos
 }
 
-
 /**
  * Displays list of repo and returns the repo selected by the user
  *
@@ -68,10 +67,10 @@ const selectRepo = async (): Promise<SelectedRepoClone> => {
   const remoteRepos = (await getConfig('remoteRepos')) || []
 
   if (isRepoCloned(owner, name, remoteRepos)) {
-    sdk.log(`\n ❌ You have already cloned this repo!`)
+    await ux.print(`\n ❌ You have already cloned this repo!`)
     process.exit()
   }
-  sdk.log(
+  await ux.print(
     `\n 🎉 ${ux.colors.callOutCyan(
       `Successfully cloned repo! ${ux.colors.white(
         `'cd ${name}'`,

@@ -1,4 +1,4 @@
-import { Question, sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import * as fuzzy from 'fuzzy'
@@ -13,11 +13,11 @@ import { IssueListFuzzy, IssueListValue } from '../types/IssueTypes'
 const debug = Debug('github:issueList')
 
 let formattedList: {
-  name: string;
+  name: string
   value: {
-    number: number;
-    title: string;
-  };
+    number: number
+    title: string
+  }
 }[] = [] //see formatListRepo()
 
 const formatListRepo = (issues: Github.IssuesListForRepoResponse) => {
@@ -70,7 +70,7 @@ const promptIssueSelection = async (): Promise<IssueListValue> => {
       `🔍 Start work on an issue by running 'ops issue:start'!`,
     )}\n`,
     name: 'issue',
-    choices: []
+    choices: [],
   }
   const { issue } = await keyValPrompt(question, formattedList)
   return issue
@@ -125,14 +125,16 @@ export const issueList = async ({ currentRepo }) => {
 
       // check if issues exist
       if (!issues || !issues.length) {
-        sdk.log(`\n❌ There are no issues. Create one with 'issue:create'.\n`)
+        await ux.print(
+          `\n❌ There are no issues. Create one with 'issue:create'.\n`,
+        )
         process.exit()
       }
 
       // format list for repo specific issues
       formattedList = formatListRepo(issues)
       const { number, title } = await promptIssueSelection()
-      sdk.log(
+      await ux.print(
         `\n✅ Run '$ ops run github issue:start' to get started with the issue '# ${number} - ${title}'.\n`,
       )
       process.exit()
@@ -143,7 +145,7 @@ export const issueList = async ({ currentRepo }) => {
 
     // check if issues exist
     if (!issues || !issues.length) {
-      sdk.log(`❌ There are no issues. Create one with 'issue:create'.`)
+      await ux.print(`❌ There are no issues. Create one with 'issue:create'.`)
       process.exit()
     }
 
@@ -152,12 +154,12 @@ export const issueList = async ({ currentRepo }) => {
 
     const remoteRepos = (await getConfig('remoteRepos')) || []
     if (isRepoCloned(repoOwner, repoName, remoteRepos)) {
-      sdk.log(
+      await ux.print(
         `\n✅ cd ${repoName} and use command 'ops run github issue:start' to get started with the issue.\n`,
       )
       process.exit()
     }
-    sdk.log(
+    await ux.print(
       `\n🤖 Repo ${repoName} is not yet cloned. Clone the repo using command repo:clone and then use issue:start to get started on the issue.\n`,
     )
   } catch (err) {

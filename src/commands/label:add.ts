@@ -1,4 +1,4 @@
-import { Question, sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import { ParseAndHandleError } from '../errors'
@@ -49,16 +49,20 @@ const promptUserInput = async () => {
 
   //TODO: not sure if setting errMess in validation function works. Will have to test.
   // let errMess: string = ""
-  const answers = await validatedPrompt(questions, (response: any) => {
-    if (response[questions[1].name].length > 100) {
-      // errMess = ' Label description must be under 100 characters in length!'
-      return false
-    } else if (!isValidColor(response[questions[2].name])) {
-      // errMess = ' That is not a valid hex code!'
-      return false
-    }
-    return true
-  }, 'Label description must be under 100 characters in length, and colour must be a valid hex code!')
+  const answers = await validatedPrompt(
+    questions,
+    (response: any) => {
+      if (response[questions[1].name].length > 100) {
+        // errMess = ' Label description must be under 100 characters in length!'
+        return false
+      } else if (!isValidColor(response[questions[2].name])) {
+        // errMess = ' That is not a valid hex code!'
+        return false
+      }
+      return true
+    },
+    'Label description must be under 100 characters in length, and colour must be a valid hex code!',
+  )
   return answers
 }
 
@@ -124,12 +128,14 @@ export const labelAdd = async (cmdOptions: CommandOptions) => {
           type: 'checkbox',
           name: 'reposSelected',
           message: 'Select from the list below',
-          choices: repoKV.map((val) => { return val.name }),
+          choices: repoKV.map(val => {
+            return val.name
+          }),
         }
-        const reposSelectedUnmapped: string[] = await ux.prompt(
-          repoListSelect,
-        )
-        const reposSelected = reposSelectedUnmapped.map((value) => { return repoKV[value] })
+        const reposSelectedUnmapped: string[] = await ux.prompt(repoListSelect)
+        const reposSelected = reposSelectedUnmapped.map(value => {
+          return repoKV[value]
+        })
 
         try {
           await Promise.all(
@@ -143,7 +149,7 @@ export const labelAdd = async (cmdOptions: CommandOptions) => {
           await ParseAndHandleError(err, 'createLabels()')
         }
 
-        sdk.log(
+        await ux.print(
           `🎉 ${ux.colors.green(
             'Label has been added to the selected repos.',
           )}`,
@@ -158,7 +164,7 @@ export const labelAdd = async (cmdOptions: CommandOptions) => {
       await ParseAndHandleError(err, 'createLabels()')
     }
 
-    sdk.log(`🎉 ${ux.colors.green('Label has been added.')}`)
+    await ux.print(`🎉 ${ux.colors.green('Label has been added.')}`)
     process.exit()
   } catch (err) {
     debug('label add failed', err)

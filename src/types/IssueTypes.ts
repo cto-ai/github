@@ -1,4 +1,4 @@
-import { Question } from '@cto.ai/sdk';
+import { Question } from '@cto.ai/sdk'
 
 export interface IssueListValue {
   title: string

@@ -1,35 +1,36 @@
-import { Question, sdk, ux } from '@cto.ai/sdk';
-import * as Github from '@octokit/rest';
-import Debug from 'debug';
-import { LABELS } from '../constants';
-import { ParseAndHandleError } from '../errors';
-import { checkCurrentRepo } from '../helpers/checkCurrentRepo';
-import { execPromisified } from '../helpers/execPromisified';
-import { getGithub } from '../helpers/getGithub';
-import { checkForLocalBranch, makeInitialCommit } from '../helpers/git';
-import { keyValPrompt } from '../helpers/promptUtils';
-import { AnsFilterSelect } from '../types/Answers';
-import { CommandOptions } from '../types/Config';
-import { DataForFilter, HelpInfo, IssueSelectionItem } from '../types/IssueTypes';
-import stripAnsi = require('strip-ansi');
+import { Question, ux } from '@cto.ai/sdk'
+import * as Github from '@octokit/rest'
+import Debug from 'debug'
+import { LABELS } from '../constants'
+import { ParseAndHandleError } from '../errors'
+import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import { execPromisified } from '../helpers/execPromisified'
+import { getGithub } from '../helpers/getGithub'
+import { checkForLocalBranch, makeInitialCommit } from '../helpers/git'
+import { keyValPrompt } from '../helpers/promptUtils'
+import { AnsFilterSelect } from '../types/Answers'
+import { CommandOptions } from '../types/Config'
+import {
+  DataForFilter,
+  HelpInfo,
+  IssueSelectionItem,
+} from '../types/IssueTypes'
+import stripAnsi = require('strip-ansi')
 
 const debug = Debug('github:issueSearch')
 const yargs = require('yargs')
 
-const filterSelectPrompt = (
-  list: string[],
-): Question<AnsFilterSelect>[] => [
-    {
-      type: 'autocomplete',
-      name: 'filter',
-      message: 'Please select the filter',
-      choices: list,
-      // pageSize: process.stdout.rows,
-    },
-  ]
+const filterSelectPrompt = (list: string[]): Question<AnsFilterSelect>[] => [
+  {
+    type: 'autocomplete',
+    name: 'filter',
+    message: 'Please select the filter',
+    choices: list,
+    // pageSize: process.stdout.rows,
+  },
+]
 
-const issueSelectPrompt: Question =
-{
+const issueSelectPrompt: Question = {
   type: 'autocomplete',
   name: 'issue',
   message: 'Please select the issue (use ➡️  key to view body)',
@@ -273,7 +274,7 @@ ${stateStr}\t ${commentStr}\t ${assigneeStr}\n`
         LABELS.PM_TASKS.name,
       )
     }
-    sdk.log(
+    await ux.print(
       `\n🙌 Issue ${ux.colors.callOutCyan(
         `${issue.number}-${issue.title}`,
       )} has been checked out and ready to be worked on.\nUse ${ux.colors.callOutCyan(

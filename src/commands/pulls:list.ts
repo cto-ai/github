@@ -1,4 +1,4 @@
-import { Question, sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import { ParseAndHandleError } from '../errors'
@@ -10,12 +10,12 @@ import { CommandOptions } from '../types/Config'
 import { PullsListValue } from '../types/PullsTypes'
 
 let formattedList: {
-  name: string;
+  name: string
   value: {
-    number: number;
-    title: string;
-    url: string;
-  };
+    number: number
+    title: string
+    url: string
+  }
 }[] = []
 
 const debug = Debug('github:pullsList')
@@ -92,7 +92,7 @@ export const pullsList = async (cmdOptions: CommandOptions) => {
 
     formattedList = formatList(pulls)
     const { url } = await promptPullRequestSelection(repo)
-    sdk.log(
+    await ux.print(
       `\nView the pull request here: 🔗 ${ux.colors.actionBlue(`${url}`)}\n`,
     )
   } catch (err) {

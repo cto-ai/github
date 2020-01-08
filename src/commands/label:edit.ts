@@ -1,15 +1,27 @@
-import { Question, sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import * as fuzzy from 'fuzzy'
 import { ParseAndHandleError } from '../errors'
 import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { getGithub } from '../helpers/getGithub'
-import { editLabel, findReposWithSelectedLabel, getAllLabelsForRepo } from '../helpers/labels'
+import {
+  editLabel,
+  findReposWithSelectedLabel,
+  getAllLabelsForRepo,
+} from '../helpers/labels'
 import { keyValPrompt } from '../helpers/promptUtils'
-import { AnsSelectLabelEdit, AnsSelectReposForLabel, AnsSelectYesNo } from '../types/Answers'
+import {
+  AnsSelectLabelEdit,
+  AnsSelectReposForLabel,
+  AnsSelectYesNo,
+} from '../types/Answers'
 import { CommandOptions } from '../types/Config'
-import { LabelEditFormattedItem, LabelKeys, RepoWithOwnerAndName } from '../types/Labels'
+import {
+  LabelEditFormattedItem,
+  LabelKeys,
+  RepoWithOwnerAndName,
+} from '../types/Labels'
 
 const debug = Debug('github:labelEdit')
 
@@ -168,7 +180,7 @@ export const labelEdit = async (cmdOptions: CommandOptions) => {
     const yesOrNo = await promptYesNo()
 
     if (yesOrNo) {
-      sdk.log(`Finding repos that has the label ${labelName}...`)
+      await ux.print(`Finding repos that has the label ${labelName}...`)
 
       try {
         // find all repos that has the selected label
@@ -187,7 +199,7 @@ export const labelEdit = async (cmdOptions: CommandOptions) => {
               return await editLabel(owner, repo, labelName, newLabel, github)
             }),
           )
-          sdk.log(
+          await ux.print(
             `🎉 ${ux.colors.green(
               `Label ${labelName} has been updated in the selected repos.`,
             )}`,
@@ -198,7 +210,7 @@ export const labelEdit = async (cmdOptions: CommandOptions) => {
           await ParseAndHandleError(err, 'editLabel()')
         }
       } catch (err) {
-        sdk.log(`${err}\n🏃 Updating label in the current repo!`)
+        await ux.print(`${err}\n🏃 Updating label in the current repo!`)
         await ParseAndHandleError(err, 'Update label')
       }
     }
@@ -217,7 +229,7 @@ export const labelEdit = async (cmdOptions: CommandOptions) => {
       await ParseAndHandleError(err, 'editLabel()')
     }
 
-    sdk.log(
+    await ux.print(
       `🎉 ${ux.colors.green(
         `Label ${labelName} has been updated in the current repo.`,
       )}`,

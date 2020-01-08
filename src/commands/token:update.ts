@@ -28,9 +28,13 @@ export const promptForToken = async () => {
     //   !!input.trim() || 'Please enter a valid Github Access Token',
   }
   // return await ux.prompt<AnsToken>(question)
-  return await validatedPrompt(question, (input: any) => {
-    return !!input[question.name].trim() ? false : true
-  }, 'Please enter a valid Github Access Token')
+  return await validatedPrompt(
+    question,
+    (input: any) => {
+      return !!input[question.name].trim()
+    },
+    'Please enter a valid Github Access Token',
+  )
 }
 
 export const updateAccessToken = async () => {

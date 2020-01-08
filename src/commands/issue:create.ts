@@ -22,7 +22,7 @@ export const issueCreate = async (cmdOptions: CommandOptions) => {
     if (!hasIssues) {
       try {
         await ux.spinner.stop('❌')
-        sdk.log(`🏃 Trying to update repo to enable issues!`)
+        await ux.print(`🏃 Trying to update repo to enable issues!`)
         await github.repos.update({
           name: repo,
           owner,
@@ -86,7 +86,7 @@ export const issueCreate = async (cmdOptions: CommandOptions) => {
       body,
     })
 
-    sdk.log(
+    await ux.print(
       `\n🎉 Successfully created issue ${ux.colors.callOutCyan(
         `${title}`,
       )} for the ${ux.colors.callOutCyan(

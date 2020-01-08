@@ -1,5 +1,14 @@
-import { IssueListValue, IssueStartValue, IssueValue, RepoContributor } from './IssueTypes'
-import { LabelKeys, LabelRemoveFormattedItemValue, RepoWithOwnerAndName } from './Labels'
+import {
+  IssueListValue,
+  IssueStartValue,
+  IssueValue,
+  RepoContributor,
+} from './IssueTypes'
+import {
+  LabelKeys,
+  LabelRemoveFormattedItemValue,
+  RepoWithOwnerAndName,
+} from './Labels'
 import { PullsListValue } from './PullsTypes'
 import { SelectedRepoClone } from './RepoTypes'
 

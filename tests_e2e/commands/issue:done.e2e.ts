@@ -37,7 +37,7 @@ describe('issue:done happy path', () => {
         )
         process.exit()
       }
-      const { owner, repo } = filterForRepoInfo(originUrl)
+      const { owner, repo } = await filterForRepoInfo(originUrl)
 
       process.chdir('a')
 

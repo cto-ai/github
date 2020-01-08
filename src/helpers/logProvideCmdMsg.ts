@@ -1,4 +1,4 @@
-import { sdk, ux } from '@cto.ai/sdk'
+import { ux } from '@cto.ai/sdk'
 
 const getTable = async commands => {
   const data = Object.keys(commands).map(item => {
@@ -30,8 +30,8 @@ export const logProvideCmdMsg = async commands => {
   const msgPost = `\n➡️  Try cloning a repo using ${ux.colors.multiPurple(
     'ops run github repo:clone',
   )} to get started!\n`
-  sdk.log(msgPre)
+  await ux.print(msgPre)
   // ux.table returns void but console logs the table
   await getTable(commands)
-  sdk.log(msgPost)
+  await ux.print(msgPost)
 }

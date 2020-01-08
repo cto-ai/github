@@ -1,4 +1,4 @@
-import { ux } from "@cto.ai/sdk"
+import { ux } from '@cto.ai/sdk'
 
 // based on https://github.com/obengwilliam/pipeawait
 
@@ -12,4 +12,3 @@ const _trace = (msg: string) => (x: any) => {
 }
 
 export { asyncPipe, _trace }
-

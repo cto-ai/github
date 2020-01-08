@@ -1,4 +1,4 @@
-import { Question, sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import branch from 'git-branch'
@@ -6,7 +6,11 @@ import { LABELS } from '../constants'
 import { ParseAndHandleError } from '../errors'
 import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { getGithub } from '../helpers/getGithub'
-import { AnsPullRequest, AnsSelectContributor, AnsSelectYesNo } from '../types/Answers'
+import {
+  AnsPullRequest,
+  AnsSelectContributor,
+  AnsSelectYesNo,
+} from '../types/Answers'
 import { CommandOptions } from '../types/Config'
 const debug = Debug('github:issueDone')
 
@@ -97,7 +101,7 @@ export const issueDone = async (cmdOptions: CommandOptions) => {
     const currentBranch = await branch()
 
     if (currentBranch === 'master') {
-      sdk.log(
+      await ux.print(
         `\n❌ Sorry, you cannot create a pull request with master as head. Checkout to a feature branch.\n`,
       )
       process.exit()
@@ -157,7 +161,7 @@ export const issueDone = async (cmdOptions: CommandOptions) => {
       const selected = await selectContributor(contributorsArr)
       await createComment(github, owner, repo, issue_number, selected)
     }
-    sdk.log(
+    await ux.print(
       `\n🎉 Successfully created your pull-request! \n➡️  You can find it here: ${ux.colors.callOutCyan(
         url,
       )}\n`,

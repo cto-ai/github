@@ -1,4 +1,4 @@
-import { Question, sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import * as fs from 'fs-extra'
@@ -95,7 +95,7 @@ const getRepoInfoFromUser = async (
       //   { name: '🔐 private', value: 'private' },
       //   { name: '🌎 public', value: 'public' },
       // ],
-      choices: ['private', 'public']
+      choices: ['private', 'public'],
       // afterMessage: `${ux.colors.reset.green('✓')} Type`,
     },
   ]
@@ -182,7 +182,7 @@ export const repoCreate = async ({ accessToken }: CommandOptions) => {
 
     ux.spinner.stop(`${ux.colors.green('done!')}`)
 
-    sdk.log(
+    await ux.print(
       `\n🎉 ${ux.colors.callOutCyan(
         `Successfully created repo ${ux.colors.white(
           name,

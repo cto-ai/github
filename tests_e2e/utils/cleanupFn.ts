@@ -17,7 +17,7 @@ const cleanRepoCreate = async () => {
       )
       process.exit()
     }
-    const { owner, repo } = filterForRepoInfo(originUrl)
+    const { owner, repo } = await filterForRepoInfo(originUrl)
     await github.repos.delete({
       owner,
       repo,
@@ -68,7 +68,7 @@ const cleanIssueCreate = async () => {
       )
       process.exit()
     }
-    const { owner, repo } = filterForRepoInfo(originUrl)
+    const { owner, repo } = await filterForRepoInfo(originUrl)
     await github.repos.delete({
       owner,
       repo,

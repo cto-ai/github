@@ -45,7 +45,7 @@ describe('issue:create happy path', () => {
         )
         process.exit()
       }
-      const { owner, repo } = filterForRepoInfo(originUrl)
+      const { owner, repo } = await filterForRepoInfo(originUrl)
 
       await github.repos
         .get({

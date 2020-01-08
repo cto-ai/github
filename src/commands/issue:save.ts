@@ -1,4 +1,4 @@
-import { Question, sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import Debug from 'debug'
 import branch from 'git-branch'
 import { ParseAndHandleError } from '../errors'
@@ -18,7 +18,7 @@ export const issueSave = async () => {
   try {
     const hasLocalChanges = await checkLocalChanges()
     if (!hasLocalChanges) {
-      sdk.log('\n❌ Nothing to save!\n')
+      await ux.print('\n❌ Nothing to save!\n')
       return
     }
     await execPromisified(`git add .`)
@@ -26,7 +26,7 @@ export const issueSave = async () => {
     await execPromisified(`git commit -m "${message}"`)
     const currentBranch = await branch()
     await execPromisified(`git push --set-upstream origin ${currentBranch}`)
-    sdk.log('\n🎉 Successfully committed and pushed your code!\n')
+    await ux.print('\n🎉 Successfully committed and pushed your code!\n')
   } catch (err) {
     debug(err)
     await ParseAndHandleError(err, 'issue:save')

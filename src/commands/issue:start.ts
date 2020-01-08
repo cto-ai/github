@@ -1,4 +1,4 @@
-import { Question, sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import Debug from 'debug'
 import { LABELS } from '../constants'
 import { ParseAndHandleError } from '../errors'
@@ -31,7 +31,9 @@ export const issueStart = async (cmdOptions: CommandOptions) => {
   })
 
   if (!filteredIssues || !filteredIssues.length) {
-    sdk.log(`\n❌ There are no issues. Create one with 'issue:create'.\n`)
+    await ux.print(
+      `\n❌ There are no issues. Create one with 'issue:create'.\n`,
+    )
     return
   }
 
@@ -90,7 +92,7 @@ export const issueStart = async (cmdOptions: CommandOptions) => {
   } catch (err) {
     await ParseAndHandleError(err, 'Local git branch creation/checkout')
   }
-  sdk.log(
+  await ux.print(
     `\n🙌 Issue ${ux.colors.callOutCyan(
       `# ${answers.issue.number} - ${answers.issue.title}`,
     )} has been checked out and read to be worked on.\nUse ${ux.colors.callOutCyan(

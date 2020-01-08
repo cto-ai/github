@@ -1,14 +1,26 @@
-import { Question, sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import * as fuzzy from 'fuzzy'
 import { ParseAndHandleError } from '../errors'
 import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { getGithub } from '../helpers/getGithub'
-import { findReposWithSelectedLabel, getAllLabelsForRepo, removeLabel } from '../helpers/labels'
-import { AnsSelectLabelRemove, AnsSelectReposForLabel, AnsSelectYesNo } from '../types/Answers'
+import {
+  findReposWithSelectedLabel,
+  getAllLabelsForRepo,
+  removeLabel,
+} from '../helpers/labels'
+import {
+  AnsSelectLabelRemove,
+  AnsSelectReposForLabel,
+  AnsSelectYesNo,
+} from '../types/Answers'
 import { CommandOptions } from '../types/Config'
-import { LabelRemoveFormattedItem, LabelRemoveFormattedItemValue, RepoWithOwnerAndName } from '../types/Labels'
+import {
+  LabelRemoveFormattedItem,
+  LabelRemoveFormattedItemValue,
+  RepoWithOwnerAndName,
+} from '../types/Labels'
 
 const debug = Debug('github:labelRemove')
 
@@ -60,7 +72,7 @@ const labelSelection = async (): Promise<LabelRemoveFormattedItemValue> => {
     type: 'autocomplete',
     message: 'Choose a label to remove:\n',
     name: 'label',
-    choices: formattedList
+    choices: formattedList,
     // source: autocompleteSearch,
     // bottomContent: '',
   }
@@ -103,12 +115,12 @@ const selectRepos = async (
     }),
   }
 
-  const reposSelectedUnmapped: string[] = await ux.prompt(
-    repoListSelect,
-  )
+  const reposSelectedUnmapped: string[] = await ux.prompt(repoListSelect)
 
   return reposSelectedUnmapped.map((value: string) => {
-    return repoKV.find((repoEntry) => { return repoEntry.name == value }).value
+    return repoKV.find(repoEntry => {
+      return repoEntry.name == value
+    }).value
   })
   // return reposSelected
 }
@@ -136,7 +148,7 @@ export const labelRemove = async (cmdOptions: CommandOptions) => {
   const yesOrNo = await promptYesNo()
 
   if (yesOrNo) {
-    sdk.log(`Finding repos that has the label ${labelName}...`)
+    await ux.print(`Finding repos that has the label ${labelName}...`)
     try {
       // find all repos that has the selected label
       const filteredRepos = await findReposWithSelectedLabel(
@@ -160,7 +172,7 @@ export const labelRemove = async (cmdOptions: CommandOptions) => {
         await ParseAndHandleError(err, 'Label removed from organzation repos')
       }
 
-      sdk.log(
+      await ux.print(
         `🎉 ${ux.colors.green(
           'Label has been removed from the selected repos.',
         )}`,
@@ -179,7 +191,7 @@ export const labelRemove = async (cmdOptions: CommandOptions) => {
     debug('remove label failed', err)
     await ParseAndHandleError(err, 'label:remove')
   }
-  sdk.log(
+  await ux.print(
     `🎉 ${ux.colors.green('Label has been removed from the current repo.')}`,
   )
   process.exit()
