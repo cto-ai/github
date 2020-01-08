@@ -132,7 +132,7 @@ const createGithubRepo = async (
     return response
   } catch (err) {
     await ux.print(err)
-    ux.spinner.stop('failed!')
+    await ux.spinner.stop('failed!')
     await ParseAndHandleError(err, 'createRepo()')
   }
 }
@@ -180,7 +180,7 @@ export const repoCreate = async ({ accessToken }: CommandOptions) => {
       `cd ${name} && git add . && git commit --allow-empty -m 'initial commit' && git push`,
     )
 
-    ux.spinner.stop(`${ux.colors.green('done!')}`)
+    await ux.spinner.stop(`${ux.colors.green('done!')}`)
 
     await ux.print(
       `\n🎉 ${ux.colors.callOutCyan(
@@ -192,7 +192,7 @@ export const repoCreate = async ({ accessToken }: CommandOptions) => {
       )} \n`,
     )
   } catch (err) {
-    ux.spinner.stop(`${ux.colors.red('failed!')}\n`)
+    await ux.spinner.stop(`${ux.colors.red('failed!')}\n`)
     debug('repo:create failed', err)
     await ParseAndHandleError(err, 'repo:create')
   }
