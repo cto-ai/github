@@ -15,3 +15,13 @@ export const validatedPrompt = async (prompt: Question | Questions, validate: (r
     } while (!validate(response));
     return response
 }
+
+export const keyValPrompt = async (prompt: Question, choices: { name: string, value: any }[]) => {
+    //TODO: more specific question type
+    //TODO: handle question that only returns 1 val / question that returns 0 or more val
+    const nameList: string[] = choices.map((value) => { return value.name })
+    let filledPrompt = prompt
+    filledPrompt['choices'] = nameList
+    const resp = await ux.prompt(prompt)
+
+}

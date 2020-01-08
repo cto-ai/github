@@ -2,7 +2,7 @@ import { Question, ux } from '@cto.ai/sdk'
 import Debug from 'debug'
 import { ParseAndHandleError } from '../errors'
 import { setConfig } from '../helpers/config'
-import { validatedPrompt } from '../helpers/validatedPrompts'
+import { validatedPrompt } from '../helpers/promptUtils'
 import { AnsToken } from '../types/Answers'
 
 const debug = Debug('github:tokenUpdate')
