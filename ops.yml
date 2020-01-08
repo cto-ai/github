@@ -21,6 +21,7 @@ commands:
       - src
       - Dockerfile
       - package.json
+      - package-lock.json
       - .dockerignore
       - tsconfig.json
     mountCwd: # If set to `true`, binds the host's current working directory to `/cwd`; default value: `false` - working directory `/ops`

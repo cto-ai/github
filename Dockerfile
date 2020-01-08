@@ -7,9 +7,9 @@ WORKDIR /ops
 
 RUN apt update && apt install -y python && mkdir lib
 
-ADD package.json .
+ADD package.json package-lock.json ./
 RUN npm install
-RUN npx modclean -release && rm modclean*.log
+RUN du -sh /ops/node_modules && npx modclean -release && rm modclean*.log && du -sh /ops/node_modules
 
 ADD . .
 

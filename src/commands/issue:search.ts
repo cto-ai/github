@@ -1,17 +1,17 @@
-import { Question, sdk, ux } from '@cto.ai/sdk'
-import * as Github from '@octokit/rest'
-import Debug from 'debug'
-import stripAnsi from 'strip-ansi'
-import { LABELS } from '../constants'
-import { ParseAndHandleError } from '../errors'
-import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
-import { execPromisified } from '../helpers/execPromisified'
-import { getGithub } from '../helpers/getGithub'
-import { checkForLocalBranch, makeInitialCommit } from '../helpers/git'
-import { keyValPrompt } from '../helpers/promptUtils'
-import { AnsFilterSelect } from '../types/Answers'
-import { CommandOptions } from '../types/Config'
-import { DataForFilter, HelpInfo, IssueSelectionItem } from '../types/IssueTypes'
+import { Question, sdk, ux } from '@cto.ai/sdk';
+import * as Github from '@octokit/rest';
+import Debug from 'debug';
+import { LABELS } from '../constants';
+import { ParseAndHandleError } from '../errors';
+import { checkCurrentRepo } from '../helpers/checkCurrentRepo';
+import { execPromisified } from '../helpers/execPromisified';
+import { getGithub } from '../helpers/getGithub';
+import { checkForLocalBranch, makeInitialCommit } from '../helpers/git';
+import { keyValPrompt } from '../helpers/promptUtils';
+import { AnsFilterSelect } from '../types/Answers';
+import { CommandOptions } from '../types/Config';
+import { DataForFilter, HelpInfo, IssueSelectionItem } from '../types/IssueTypes';
+import stripAnsi = require('strip-ansi');
 
 const debug = Debug('github:issueSearch')
 const yargs = require('yargs')
