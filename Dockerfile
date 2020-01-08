@@ -13,7 +13,7 @@ RUN npx modclean -release && rm modclean*.log
 
 ADD . .
 
-RUN npm run build && rm -rf /ops/src package-lock.json .dockerignore
+RUN npm run build && rm -rf /ops/src package-lock.json .dockerignore && mv /ops/lib/templates /ops/lib/src/ && mv /ops/lib/src/* /ops/lib/ && rm -r /ops/lib/src/
 
 ############################
 # Final container
