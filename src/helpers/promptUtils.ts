@@ -27,8 +27,8 @@ export const validatedPrompt = async (prompt: Question | Questions, validate: (r
 //prompt.choices will be overwritten, so feel free to set it to anything
 export const keyValPrompt = async (prompt: Question, choices: { name: string, value: any }[]) => {
     //the ListQuestion interface is not actually exported
-    if (['list', 'autocomplete', 'checkbox'].includes(prompt?.name)) {
-        throw `prompt must be one of [list, autocomplete, checkbox], but got ${prompt?.name}!`
+    if (['list', 'autocomplete', 'checkbox'].includes(prompt.name)) {
+        throw `prompt must be one of [list, autocomplete, checkbox], but got ${prompt.name}!`
     }
 
     let nameList: string[] = new Array(choices.length)
@@ -43,7 +43,7 @@ export const keyValPrompt = async (prompt: Question, choices: { name: string, va
 
     //have the use select the key(s)...
     const resp = await ux.prompt(Object.assign(prompt, { choices: nameList }))
-    if (prompt?.name && resp[prompt?.name]) {
+    if (resp[prompt.name]) {
         //and return the associated value(s)
         if (prompt.type == 'checkbox') {
             //multiple values
