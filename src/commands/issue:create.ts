@@ -1,4 +1,4 @@
-import { sdk, ux } from '@cto.ai/sdk'
+import { ux } from '@cto.ai/sdk'
 import Debug from 'debug'
 import * as fs from 'fs'
 import * as path from 'path'

@@ -1,14 +1,13 @@
 import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
-import * as fuzzy from 'fuzzy'
 import { ParseAndHandleError } from '../errors'
 import { getConfig } from '../helpers/config'
 import { getGithub } from '../helpers/getGithub'
 import { isRepoCloned } from '../helpers/isRepoCloned'
 import { keyValPrompt } from '../helpers/promptUtils'
 import { AnsIssueList } from '../types/Answers'
-import { IssueListFuzzy, IssueListValue } from '../types/IssueTypes'
+import { IssueListValue } from '../types/IssueTypes'
 
 const debug = Debug('github:issueList')
 
@@ -49,18 +48,6 @@ const formatListAll = (issues: Github.IssuesListResponse) => {
       },
     }
   })
-}
-
-/**
- * Does fuzzy search in the list for the matching characters
- *
- * @param {string} [input='']
- */
-const autocompleteSearch = async (_: any, input = '') => {
-  const fuzzyResult = await fuzzy.filter<IssueListFuzzy>(input, formattedList, {
-    extract: el => el.name,
-  })
-  return fuzzyResult.map(result => result.original)
 }
 
 const promptIssueSelection = async (): Promise<IssueListValue> => {

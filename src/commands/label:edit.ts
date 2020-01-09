@@ -1,7 +1,6 @@
 import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
-import * as fuzzy from 'fuzzy'
 import { ParseAndHandleError } from '../errors'
 import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { getGithub } from '../helpers/getGithub'
@@ -22,7 +21,6 @@ import {
   LabelKeys,
   RepoWithOwnerAndName,
 } from '../types/Labels'
-
 const debug = Debug('github:labelEdit')
 
 let formattedList = []
@@ -47,22 +45,6 @@ const formatList = (
       },
     }
   })
-}
-
-/**
- * Does fuzzy search in the list for the matching characters
- *
- * @param {string} [input='']
- */
-const autocompleteSearch = async (_: any, input = '') => {
-  const fuzzyResult = await fuzzy.filter<LabelEditFormattedItem>(
-    input,
-    formattedList,
-    {
-      extract: el => el.name,
-    },
-  )
-  return fuzzyResult.map(result => result.original)
 }
 
 /**
