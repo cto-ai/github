@@ -38,18 +38,18 @@ export const keyValPrompt = async (
     throw `prompt must be one of [list, autocomplete, checkbox], but got ${prompt.name}!`
   }
 
-  let nameList: string[] = new Array(choices.length)
+  let choicesArr: string[] = new Array(choices.length)
   let keyValMap: Map<string, any> = new Map()
   for (let index = 0; index < choices.length; index++) {
     //iterate through choices, getting an array of names
     //and a key-value map
     const element = choices[index]
-    nameList[index] = element.name
+    choicesArr[index] = element.name
     keyValMap.set(element.name, element.value)
   }
 
-  //have the use select the key(s)...
-  const resp = await ux.prompt(Object.assign(prompt, { choices: nameList }))
+  //have the user select the key(s)...
+  const resp = await ux.prompt(Object.assign(prompt, { choices: choicesArr }))
   if (resp[prompt.name]) {
     //and return the associated value(s)
     if (prompt.type == 'checkbox') {
