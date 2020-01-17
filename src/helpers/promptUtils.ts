@@ -34,7 +34,7 @@ export const keyValPrompt = async (
   choices: { name: string; value: any }[],
 ) => {
   //the ListQuestion interface is not actually exported
-  if (['list', 'autocomplete', 'checkbox'].includes(prompt.name)) {
+  if (!['list', 'autocomplete', 'checkbox'].includes(prompt.name)) {
     throw `prompt must be one of [list, autocomplete, checkbox], but got ${prompt.name}!`
   }
 
