@@ -26,7 +26,6 @@ const filterSelectPrompt = (list: string[]): Question<AnsFilterSelect>[] => [
     name: 'filter',
     message: 'Please select the filter',
     choices: list,
-    // pageSize: process.stdout.rows,
   },
 ]
 
@@ -35,7 +34,6 @@ const issueSelectPrompt: Question = {
   name: 'issue',
   message: 'Please select the issue (use ➡️  key to view body)',
   choices: [],
-  // pageSize: process.stdout.rows,
 }
 
 const checkboxPrompt = (list): Question<AnsFilterSelect>[] => {
@@ -45,7 +43,6 @@ const checkboxPrompt = (list): Question<AnsFilterSelect>[] => {
       name: 'issueFilter',
       message: 'Please select the filter',
       choices: list,
-      // pageSize: process.stdout.rows,
     },
   ]
 }

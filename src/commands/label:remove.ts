@@ -56,8 +56,6 @@ const labelSelection = async (): Promise<LabelRemoveFormattedItemValue> => {
     message: 'Choose a label to remove:\n',
     name: 'label',
     choices: formattedList,
-    // source: autocompleteSearch,
-    // bottomContent: '',
   }
 
   const { label } = await ux.prompt<AnsSelectLabelRemove>(questions)
@@ -105,7 +103,6 @@ const selectRepos = async (
       return repoEntry.name == value
     }).value
   })
-  // return reposSelected
 }
 
 export const labelRemove = async (cmdOptions: CommandOptions) => {

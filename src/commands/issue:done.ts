@@ -19,13 +19,11 @@ const pullRequestQuestions: Question<AnsPullRequest>[] = [
     type: 'input',
     name: 'title',
     message: 'Enter a title for the Pull Request:',
-    // afterMessage: `${ux.colors.reset.green('✓')} Title`,
   },
   {
     type: 'input',
     name: 'comment',
     message: 'Enter a comment or description for your Pull Request',
-    // afterMessage: `${ux.colors.reset.green('✓')} Comment`,
   },
 ]
 

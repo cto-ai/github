@@ -23,32 +23,15 @@ const promptUserInput = async () => {
       type: 'input',
       name: 'description',
       message: `\nPlease enter your label description:`,
-      // afterMessage: `Description: `,
-      // validate: input => {
-      //   if (input.length > 100) {
-      //     return ' Label description must be under 100 characters in length!'
-      //   } else {
-      //     return true
-      //   }
-      // },
     },
     {
       type: 'input',
       name: 'color',
       message: `\nProvide a valid hex code for your label color (without #):`,
-      // afterMessage: `Color: `,
-      // validate: input => {
-      //   if (!isValidColor(input)) {
-      //     return ' That is not a valid hex code!'
-      //   } else {
-      //     return true
-      //   }
-      // },
     },
   ]
 
   //TODO: not sure if setting errMess in validation function works. Will have to test.
-  // let errMess: string = ""
   const answers = await validatedPrompt(
     questions,
     (response: any) => {

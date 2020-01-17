@@ -56,10 +56,8 @@ const selectRepo = async (): Promise<SelectedRepoClone> => {
   const list: Question<AnsRepoCloneSelect> = {
     type: 'autocomplete',
     name: 'repo',
-    // pageSize: 7,
     message: 'Select a repo to clone. Repos with 🤖 are already cloned.\n',
     choices: [],
-    // bottomContent: '',
   }
   // assign type SelectedRepoClone to remoteRepo
   const { repo } = await keyValPrompt(list, await formatList())

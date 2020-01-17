@@ -53,7 +53,6 @@ const promptPullRequestSelection = async (
     message: `Here's a list of pull requests for ${repo}:`,
     name: 'pullRequest',
     choices: [],
-    // bottomContent: '',
   }
 
   const { pullRequest } = await keyValPrompt(questions, formattedList)

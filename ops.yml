@@ -32,8 +32,6 @@ commands:
       - /tmp:/tmp
       - ~/.ssh:/root/.ssh
       - ~/.ops/cto.ai/github:/root/.ops/cto.ai/github
-    # port: # Map ports for your op container
-    #  - 3000:3000
     help: # Configure the output for when your op is run with `op --help` or `op -h`
       usage: "ops run github [ARGUMENT]"
       arguments:

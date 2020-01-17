@@ -71,7 +71,6 @@ const getRepoInfoFromUser = async (
     name: 'org',
     message: `\nPlease select the organization of your repo →`,
     choices: [],
-    // afterMessage: `${ux.colors.reset.green('✓')} Org`,
   }
   const questions: Question<AnsRepoCreate>[] = [
     {
@@ -85,18 +84,12 @@ const getRepoInfoFromUser = async (
       name: 'description',
       message: `\nPlease enter the description of the repo →
       \n${ux.colors.white('📝 Enter Description')}`,
-      // afterMessage: `${ux.colors.reset.green('✓')} Description`,
     },
     {
       type: 'list',
       name: 'privateOrPublic',
       message: 'Do you want to create a public repo or a private repo?',
-      // choices: [
-      //   { name: '🔐 private', value: 'private' },
-      //   { name: '🌎 public', value: 'public' },
-      // ],
       choices: ['private', 'public'],
-      // afterMessage: `${ux.colors.reset.green('✓')} Type`,
     },
   ]
   const { org } = await keyValPrompt(orgQuestion, orgsList)

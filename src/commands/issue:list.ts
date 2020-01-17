@@ -127,7 +127,7 @@ export const issueList = async ({ currentRepo }) => {
       process.exit()
     }
 
-    // if cuurent repo is undefined, list all issues
+    // if current repo is undefined, list all issues
     const issues = await getIssuesAll(github)
 
     // check if issues exist
