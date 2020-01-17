@@ -1,7 +1,7 @@
 version: "1"
 commands:
   - name: # Unique identifier for your op (required)
-      github:1.0.0
+      github:1.1.0
     description: # Short description for what your op does (required)
       An Op to simplify an opinionated GitHub workflow.
     public: # Determines whether this version of the op is visible to other people
