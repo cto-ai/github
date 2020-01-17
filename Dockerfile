@@ -22,7 +22,6 @@ FROM registry.cto.ai/official_images/node:latest
 
 WORKDIR /ops
 
-# RUN apt update && apt install git make && npm install -g typescript && npm install -g ts-node @types/node && rm -rf /var/lib/apt/lists/*
 RUN apt update && apt install -y git make ca-certificates && rm -rf /var/lib/apt/lists/*
 
 COPY --from=dep /ops .
