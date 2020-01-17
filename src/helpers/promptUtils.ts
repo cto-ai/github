@@ -33,9 +33,10 @@ export const keyValPrompt = async (
   prompt: Question,
   choices: { name: string; value: any }[],
 ) => {
+  const { name, type } = prompt
   //the ListQuestion interface is not actually exported
-  if (!['list', 'autocomplete', 'checkbox'].includes(prompt.name)) {
-    throw `prompt must be one of [list, autocomplete, checkbox], but got ${prompt.name}!`
+  if (!['list', 'autocomplete', 'checkbox'].includes(name)) {
+    throw `prompt must be one of [list, autocomplete, checkbox], but got ${name}!`
   }
 
   let choicesArr: string[] = new Array(choices.length)
@@ -50,18 +51,18 @@ export const keyValPrompt = async (
 
   //have the user select the key(s)...
   const resp = await ux.prompt(Object.assign(prompt, { choices: choicesArr }))
-  if (resp[prompt.name]) {
+  if (resp[name]) {
     //and return the associated value(s)
-    if (prompt.type == 'checkbox') {
+    if (type == 'checkbox') {
       //multiple values
       return {
-        [prompt.name]: resp[prompt.name].map((currentValue: string) => {
+        [name]: resp[name].map((currentValue: string) => {
           keyValMap.get(currentValue)
         }),
       }
     } else {
       //single value
-      return { [prompt.name]: keyValMap.get(resp[prompt.name]) }
+      return { [name]: keyValMap.get(resp[name]) }
     }
   } else {
     throw 'keyValPrompt: Failed to get the value associated with the key'
