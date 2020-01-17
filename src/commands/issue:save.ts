@@ -5,6 +5,7 @@ import { ParseAndHandleError } from '../errors'
 import { execPromisified } from '../helpers/execPromisified'
 import { checkLocalChanges } from '../helpers/git'
 import { AnsIssueSave } from '../types/Answers'
+import { validatedPrompt } from '../helpers/promptUtils'
 
 const debug = Debug('github:issueSave')
 
@@ -22,7 +23,7 @@ export const issueSave = async () => {
       return
     }
     await execPromisified(`git add .`)
-    const { message } = await ux.prompt<AnsIssueSave>(question)
+    const message = await validatedPrompt(question, (resp) => { return resp == '' ? true : false }, ' Commit message cannot be empty!')
     await execPromisified(`git commit -m "${message}"`)
     const currentBranch = await branch()
     await execPromisified(`git push --set-upstream origin ${currentBranch}`)
