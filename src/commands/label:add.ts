@@ -31,7 +31,6 @@ const promptUserInput = async () => {
     },
   ]
 
-  //TODO: not sure if setting errMess in validation function works. Will have to test.
   const answers = await validatedPrompt(
     questions,
     (response: any) => {
