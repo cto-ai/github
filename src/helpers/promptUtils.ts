@@ -29,7 +29,7 @@ export const validatedPrompt = async (
 //name must be unique, as it is used as a key
 //having duplicate names causes undefined behaviour (probably just returns one of the matching at random)
 //prompt.choices will be overwritten, so feel free to set it to anything
-export const keyValPrompt = async (
+export const keyValPrompt: (prompt: Question, choices: { name: string; value: any;}[]) => Promise<{[x: string]: any;}> = async (
   prompt: Question,
   choices: { name: string; value: any }[],
 ) => {
