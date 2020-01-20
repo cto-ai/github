@@ -6,13 +6,13 @@ import { Question, Questions, ux } from '@cto.ai/sdk'
 export const validatedPrompt = async (
   prompt: Question | Questions,
   validate: (response: any) => boolean,
-  errorMessage: string,
+  errorMessage?: string,
 ) => {
   let response: any
   let repeatedPrompt = false
   //keep asking as long as validation fails
   do {
-    if (repeatedPrompt) {
+    if (repeatedPrompt && errorMessage) {
       //not our first prompt
       //must have errored, so print the error message
       await ux.print(errorMessage)
