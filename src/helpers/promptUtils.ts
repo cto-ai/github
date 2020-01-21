@@ -1,8 +1,12 @@
 import { Question, Questions, ux } from '@cto.ai/sdk'
 
-//This re-prompts user until their answer passes validation
-//validate takes in the return value of ux.prompt, and forces re-prompt if it returns false
-//errorMessage is displayed to user when validation fails
+/**
+ * Re-prompt until the answer passes validation
+ * @param {Question | Questions} prompt
+ * @param {(response: any) => boolean} validate takes in the return value of ux.prompt, and forces re-prompt if it returns false
+ * @param {string} errorMessage is displayed to user when validation fails
+ * @returns {string} validated response
+ */
 export const validatedPrompt = async (
   prompt: Question | Questions,
   validate: (response: any) => boolean,
@@ -23,13 +27,13 @@ export const validatedPrompt = async (
   return response
 }
 
-//this replicates the SDK 1.x functionality,
-//where you can have a separate display name and actual value returned
-//prompt should be a ListQuestion, AutoCompleteQuestion, CheckboxQuestion
-//name must be unique, as it is used as a key
-//having duplicate names causes undefined behaviour (probably just returns one of the matching at random)
-//prompt.choices will be overwritten, so feel free to set it to anything
-export const keyValPrompt: (prompt: Question, choices: { name: string; value: any;}[]) => Promise<{[x: string]: any;}> = async (
+/**
+ * Shows prompt(s) with choices.name as options, but returns choices.value
+ * @param {Question} prompt whose choices will be overwritten by this function
+ * @param {{ name: string; value: any;}[]} choices consists of display names offered to users, and value which is actually returned when selected
+ * @returns {any} the corresponding values of any choices selected
+ */
+export const keyValPrompt: (prompt: Question, choices: { name: string; value: any; }[]) => Promise<{ [x: string]: any; }> = async (
   prompt: Question,
   choices: { name: string; value: any }[],
 ) => {
