@@ -39,8 +39,8 @@ export const keyValPrompt: (prompt: Question, choices: { name: string; value: an
 ) => {
   const { name, type } = prompt
   //the ListQuestion interface is not actually exported
-  if (!['list', 'autocomplete', 'checkbox'].includes(name)) {
-    throw `prompt must be one of [list, autocomplete, checkbox], but got ${name}!`
+  if (!['list', 'autocomplete', 'checkbox'].includes(type)) {
+    throw `prompt must be one of [list, autocomplete, checkbox], but got ${type}!`
   }
 
   let choicesArr: string[] = new Array(choices.length)
