@@ -1,4 +1,6 @@
-# 🚀 CTO.ai - Official Op - GitHub 🚀
+![](https://raw.githubusercontent.com/cto-ai/github/master/assets/banner.png)
+
+# GitHub 🚀
 
 An Op to simplify an opinionated GitHub workflow.
 
