@@ -1,8 +1,15 @@
-![](https://raw.githubusercontent.com/cto-ai/github/master/assets/banner.png)
+![](https://cto.ai/static/oss-banner.png)
 
 # GitHub 🚀
 
 An Op to simplify an opinionated GitHub workflow.
+
+## Notice
+
+Please note that this Op was built with SDK 1 and therefore is currently limited to CLI compatibility.
+
+If you would like to interact with GitHub in Slack, please contact us in [our community](https://CTO.ai/community) and we can help you.
+
 
 ## Requirements
 
