@@ -1,14 +1,13 @@
-import { sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import Debug from 'debug'
-import { CommandOptions } from '../types/Config'
+import { LABELS } from '../constants'
+import { ParseAndHandleError } from '../errors'
 import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { execPromisified } from '../helpers/execPromisified'
 import { getGithub } from '../helpers/getGithub'
-import { LABELS } from '../constants'
 import { checkForLocalBranch, makeInitialCommit } from '../helpers/git'
-import { Question } from '@cto.ai/inquirer'
 import { AnsSelectIssueStart } from '../types/Answers'
-import { ParseAndHandleError } from '../errors'
+import { CommandOptions } from '../types/Config'
 
 const debug = Debug('github:issueStart')
 
@@ -32,7 +31,9 @@ export const issueStart = async (cmdOptions: CommandOptions) => {
   })
 
   if (!filteredIssues || !filteredIssues.length) {
-    sdk.log(`\n❌ There are no issues. Create one with 'issue:create'.\n`)
+    await ux.print(
+      `\n❌ There are no issues. Create one with 'issue:create'.\n`,
+    )
     return
   }
 
@@ -91,7 +92,7 @@ export const issueStart = async (cmdOptions: CommandOptions) => {
   } catch (err) {
     await ParseAndHandleError(err, 'Local git branch creation/checkout')
   }
-  sdk.log(
+  await ux.print(
     `\n🙌 Issue ${ux.colors.callOutCyan(
       `# ${answers.issue.number} - ${answers.issue.title}`,
     )} has been checked out and read to be worked on.\nUse ${ux.colors.callOutCyan(

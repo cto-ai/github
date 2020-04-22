@@ -1,18 +1,16 @@
-import { sdk, ux } from '@cto.ai/sdk'
-import * as fuzzy from 'fuzzy'
-import { Question } from '@cto.ai/inquirer'
+import { Question, ux } from '@cto.ai/sdk'
 import Debug from 'debug'
-import { CommandOptions } from '../types/Config'
-import { SelectedRepoClone, FormattedRepoClone } from '../types/RepoTypes'
-import { Fuzzy } from '../types/Fuzzy'
+import { ParseAndHandleError } from '../errors'
+import { getConfig } from '../helpers/config'
 import { getGithub } from '../helpers/getGithub'
-import { saveRemoteRepoToConfig } from '../helpers/saveRemoteRepoToConfig'
 import { cloneRepo } from '../helpers/git'
 import { insertTokenInUrl } from '../helpers/insertTokenInUrl'
 import { isRepoCloned } from '../helpers/isRepoCloned'
+import { keyValPrompt } from '../helpers/promptUtils'
+import { saveRemoteRepoToConfig } from '../helpers/saveRemoteRepoToConfig'
 import { AnsRepoCloneSelect } from '../types/Answers'
-import { getConfig } from '../helpers/config'
-import { ParseAndHandleError } from '../errors'
+import { CommandOptions } from '../types/Config'
+import { FormattedRepoClone, SelectedRepoClone } from '../types/RepoTypes'
 
 const debug = Debug('github:repoClone')
 
@@ -50,21 +48,6 @@ const formatList = async (): Promise<FormattedRepoClone[]> => {
 }
 
 /**
- * Does fuzzy search in the list for the matching characters
- *
- * @param {any} _
- * @param {string} [input='']
- * @returns
- */
-const autocompleteSearch = async (_: any, input = '') => {
-  const list = await formatList()
-  const fuzzyResult: Fuzzy[] = await fuzzy.filter(input, list, {
-    extract: el => el.name,
-  })
-  return fuzzyResult.map(result => result.original)
-}
-
-/**
  * Displays list of repo and returns the repo selected by the user
  *
  * @returns {Promise<SelectedRepoClone>} - selected repo
@@ -73,21 +56,19 @@ const selectRepo = async (): Promise<SelectedRepoClone> => {
   const list: Question<AnsRepoCloneSelect> = {
     type: 'autocomplete',
     name: 'repo',
-    pageSize: 7,
     message: 'Select a repo to clone. Repos with 🤖 are already cloned.\n',
-    source: autocompleteSearch,
-    bottomContent: '',
+    choices: [],
   }
   // assign type SelectedRepoClone to remoteRepo
-  const { repo } = await ux.prompt<AnsRepoCloneSelect>(list)
+  const { repo } = await keyValPrompt(list, await formatList())
   const { owner, name } = repo
   const remoteRepos = (await getConfig('remoteRepos')) || []
 
   if (isRepoCloned(owner, name, remoteRepos)) {
-    sdk.log(`\n ❌ You have already cloned this repo!`)
+    await ux.print(`\n ❌ You have already cloned this repo!`)
     process.exit()
   }
-  sdk.log(
+  await ux.print(
     `\n 🎉 ${ux.colors.callOutCyan(
       `Successfully cloned repo! ${ux.colors.white(
         `'cd ${name}'`,

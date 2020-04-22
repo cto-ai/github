@@ -1,14 +1,13 @@
-import { sdk, ux } from '@cto.ai/sdk'
+import { ux } from '@cto.ai/sdk'
+import Debug from 'debug'
 import * as fs from 'fs'
 import * as path from 'path'
-import Debug from 'debug'
+import { ParseAndHandleError } from '../errors'
 import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { getGithub } from '../helpers/getGithub'
-import { CommandOptions } from '../types/Config'
-import { AnsIssueTitleType, AnsIssueDescription } from '../types/Answers'
-import { setConfig } from '../helpers/config'
-import { ParseAndHandleError } from '../errors'
 import { hasIssueEnabled } from '../helpers/git'
+import { AnsIssueDescription, AnsIssueTitleType } from '../types/Answers'
+import { CommandOptions } from '../types/Config'
 
 const debug = Debug('github:issueCreate')
 
@@ -23,7 +22,7 @@ export const issueCreate = async (cmdOptions: CommandOptions) => {
     if (!hasIssues) {
       try {
         await ux.spinner.stop('❌')
-        sdk.log(`🏃 Trying to update repo to enable issues!`)
+        await ux.print(`🏃 Trying to update repo to enable issues!`)
         await github.repos.update({
           name: repo,
           owner,
@@ -45,7 +44,6 @@ export const issueCreate = async (cmdOptions: CommandOptions) => {
         type: 'input',
         name: 'title',
         message: `\n📝 Please enter your issue title:`,
-        afterMessage: `Title: `,
       },
       {
         type: 'list',
@@ -54,7 +52,6 @@ export const issueCreate = async (cmdOptions: CommandOptions) => {
           'Your default editor will be opened to allow editing of the issue details.',
         )}`,
         choices: fs.readdirSync(templateDir),
-        afterMessage: `Type: `,
       },
     ])
 
@@ -87,7 +84,7 @@ export const issueCreate = async (cmdOptions: CommandOptions) => {
       body,
     })
 
-    sdk.log(
+    await ux.print(
       `\n🎉 Successfully created issue ${ux.colors.callOutCyan(
         `${title}`,
       )} for the ${ux.colors.callOutCyan(

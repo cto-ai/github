@@ -1,19 +1,19 @@
-import { sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
+import * as Github from '@octokit/rest'
+import Debug from 'debug'
 import * as fs from 'fs-extra'
 import * as path from 'path'
-import * as Github from '@octokit/rest'
 import simplegit from 'simple-git/promise'
-import { Question } from '@cto.ai/inquirer'
-import Debug from 'debug'
+import { LABELS } from '../constants'
+import { ParseAndHandleError } from '../errors'
+import { execPromisified } from '../helpers/execPromisified'
 import { getGithub } from '../helpers/getGithub'
 import { insertTokenInUrl } from '../helpers/insertTokenInUrl'
-import { execPromisified } from '../helpers/execPromisified'
-import { saveRemoteRepoToConfig } from '../helpers/saveRemoteRepoToConfig'
-import { LABELS } from '../constants'
 import { createLabels } from '../helpers/labels'
+import { keyValPrompt } from '../helpers/promptUtils'
+import { saveRemoteRepoToConfig } from '../helpers/saveRemoteRepoToConfig'
 import { AnsRepoCreate } from '../types/Answers'
 import { CommandOptions } from '../types/Config'
-import { ParseAndHandleError } from '../errors'
 
 const debug = Debug('github:repoCreate')
 
@@ -66,47 +66,35 @@ const getRepoInfoFromUser = async (
       return { name: org.login, value: org.login }
     }),
   ]
+  const orgQuestion: Question = {
+    type: 'list',
+    name: 'org',
+    message: `\nPlease select the organization of your repo →`,
+    choices: [],
+  }
   const questions: Question<AnsRepoCreate>[] = [
-    {
-      type: 'list',
-      name: 'org',
-      message: `\nPlease select the organization of your repo →`,
-      choices: orgsList,
-      afterMessage: `${ux.colors.reset.green('✓')} Org`,
-    },
     {
       type: 'input',
       name: 'name',
       message: `\nPlease enter the name of the repo →
       \n${ux.colors.white('📝 Enter Name')}`,
-      afterMessage: `${ux.colors.reset.green('✓')} Name`,
-      validate: input => {
-        if (input === '') {
-          return 'The repo name cannot be blank!'
-        } else {
-          return true
-        }
-      },
     },
     {
       type: 'input',
       name: 'description',
       message: `\nPlease enter the description of the repo →
       \n${ux.colors.white('📝 Enter Description')}`,
-      afterMessage: `${ux.colors.reset.green('✓')} Description`,
     },
     {
       type: 'list',
       name: 'privateOrPublic',
       message: 'Do you want to create a public repo or a private repo?',
-      choices: [
-        { name: '🔐 private', value: 'private' },
-        { name: '🌎 public', value: 'public' },
-      ],
-      afterMessage: `${ux.colors.reset.green('✓')} Type`,
+      choices: ['private', 'public'],
     },
   ]
-  const answers = await ux.prompt<AnsRepoCreate>(questions)
+  const { org } = await keyValPrompt(orgQuestion, orgsList)
+  let answers = await ux.prompt<AnsRepoCreate>(questions)
+  answers.org = org
   return answers
 }
 
@@ -136,8 +124,8 @@ const createGithubRepo = async (
     const response = await github.repos.createInOrg({ org, ...options })
     return response
   } catch (err) {
-    console.log(err)
-    ux.spinner.stop('failed!')
+    await ux.print(err)
+    await ux.spinner.stop('failed!')
     await ParseAndHandleError(err, 'createRepo()')
   }
 }
@@ -155,7 +143,7 @@ export const repoCreate = async ({ accessToken }: CommandOptions) => {
 
     const answers = await getRepoInfoFromUser(orgs, personalAccountLogin)
 
-    ux.spinner.start('Creating repo')
+    await ux.spinner.start('Creating repo')
 
     const {
       data: { clone_url, name, owner },
@@ -185,9 +173,9 @@ export const repoCreate = async ({ accessToken }: CommandOptions) => {
       `cd ${name} && git add . && git commit --allow-empty -m 'initial commit' && git push`,
     )
 
-    ux.spinner.stop(`${ux.colors.green('done!')}`)
+    await ux.spinner.stop(`${ux.colors.green('done!')}`)
 
-    sdk.log(
+    await ux.print(
       `\n🎉 ${ux.colors.callOutCyan(
         `Successfully created repo ${ux.colors.white(
           name,
@@ -197,7 +185,7 @@ export const repoCreate = async ({ accessToken }: CommandOptions) => {
       )} \n`,
     )
   } catch (err) {
-    ux.spinner.stop(`${ux.colors.red('failed!')}\n`)
+    await ux.spinner.stop(`${ux.colors.red('failed!')}\n`)
     debug('repo:create failed', err)
     await ParseAndHandleError(err, 'repo:create')
   }

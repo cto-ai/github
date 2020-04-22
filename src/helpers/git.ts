@@ -1,7 +1,7 @@
-import { execPromisified } from '../helpers/execPromisified'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import { ParseAndHandleError } from '../errors'
+import { execPromisified } from '../helpers/execPromisified'
 
 const debug = Debug('github:gitHelpers')
 

@@ -1,14 +1,10 @@
-import { spawn, ChildProcess, SpawnOptions } from 'child_process'
-import { cleanupFn } from '../utils/cleanupFn'
-import Debug from 'debug'
+import { ux } from '@cto.ai/sdk'
+import { ChildProcess, spawn, SpawnOptions } from 'child_process'
 import concat from 'concat-stream'
-import {
-  OP_NAME,
-  OP_PATH,
-  EXISTING_USER_NAME,
-  EXISTING_USER_PASSWORD,
-} from '../utils/constants'
+import Debug from 'debug'
 import { execPromisified } from '../../src/helpers/execPromisified'
+import { cleanupFn } from '../utils/cleanupFn'
+import { EXISTING_USER_NAME, EXISTING_USER_PASSWORD, OP_NAME, OP_PATH } from '../utils/constants'
 
 const debugVerbose = Debug('cmd:verbose')
 
@@ -68,7 +64,7 @@ async function run({
   })
 }
 
-const sendInput = function(
+const sendInput = function (
   inputs: string[],
   child: ChildProcess,
   timeout: number,
@@ -85,7 +81,8 @@ const sendInput = function(
         child.stdin.write(firstInput)
       }
     } catch (error) {
-      console.log('%O', error)
+      //TODO: this should/should not be async
+      ux.print('%O' + error)
     }
 
     sendInput(remainingInputs, child, timeout)
@@ -95,7 +92,7 @@ const sendInput = function(
 const cleanup = async (command: string) => {
   try {
     await cleanupFn[command]()
-    console.log('cleanup endpoint hit successfully')
+    await ux.print('cleanup endpoint hit successfully')
   } catch (err) {
     console.error({ err })
   }
@@ -118,3 +115,4 @@ const signout = async () => {
 }
 
 export { run, sleep, cleanup, signin, signout }
+

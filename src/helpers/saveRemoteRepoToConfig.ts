@@ -1,7 +1,6 @@
 import Debug from 'debug'
-
-import { getConfig, setConfig } from './config'
 import { ParseAndHandleError } from '../errors'
+import { getConfig, setConfig } from './config'
 
 const debug = Debug('github:saveToConfig')
 

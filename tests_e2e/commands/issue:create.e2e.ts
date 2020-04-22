@@ -1,9 +1,10 @@
-import { run, cleanup, signin } from '../utils/cmd'
-import { ENTER, A, Q, COLON } from '../utils/constants'
-import { getGithub } from '../../src/helpers/getGithub'
-import { execPromisified } from '../../src/helpers/execPromisified'
+import { ux } from '@cto.ai/sdk'
 import parse from 'parse-git-config'
 import { filterForRepoInfo } from '../../src/helpers/checkCurrentRepo'
+import { execPromisified } from '../../src/helpers/execPromisified'
+import { getGithub } from '../../src/helpers/getGithub'
+import { cleanup, run, signin } from '../utils/cmd'
+import { A, COLON, ENTER, Q } from '../utils/constants'
 
 beforeAll(async () => {
   await signin()
@@ -39,12 +40,12 @@ describe('issue:create happy path', () => {
       const originUrl = gitconfig['remote "origin"'].url
       const github = await getGithub()
       if (!originUrl.includes('github')) {
-        console.log(
+        await ux.print(
           `❗ This repo's remote "origin" is not currently set for a Github repo`,
         )
         process.exit()
       }
-      const { owner, repo } = filterForRepoInfo(originUrl)
+      const { owner, repo } = await filterForRepoInfo(originUrl)
 
       await github.repos
         .get({

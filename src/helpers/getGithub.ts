@@ -1,8 +1,7 @@
 import Github from '@octokit/rest'
 import Debug from 'debug'
-
-import { getConfig } from './config'
 import { CredentialsError, ParseAndHandleError } from '../errors'
+import { getConfig } from './config'
 
 const debug = Debug('github:getGithub')
 

@@ -1,16 +1,22 @@
-import { sdk, ux } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
-import * as fuzzy from 'fuzzy'
-import { Question } from '@cto.ai/inquirer'
 import Debug from 'debug'
-import { CommandOptions } from '../types/Config'
-import { getGithub } from '../helpers/getGithub'
-import { PullsListFuzzy, PullsListValue } from '../types/PullsTypes'
-import { AnsSelectPull } from '../types/Answers'
-import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { ParseAndHandleError } from '../errors'
+import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import { getGithub } from '../helpers/getGithub'
+import { keyValPrompt } from '../helpers/promptUtils'
+import { AnsSelectPull } from '../types/Answers'
+import { CommandOptions } from '../types/Config'
+import { PullsListValue } from '../types/PullsTypes'
 
-let formattedList = []
+let formattedList: {
+  name: string
+  value: {
+    number: number
+    title: string
+    url: string
+  }
+}[] = []
 
 const debug = Debug('github:pullsList')
 
@@ -35,17 +41,6 @@ const formatList = (pulls: Github.PullsListResponseItem[]) => {
 }
 
 /**
- * Does fuzzy search in the list for the matching characters
- *
- * @param {string} [input='']
- */
-const autocompleteSearch = async (_: any, input = '') => {
-  const fuzzyResult = await fuzzy.filter<PullsListFuzzy>(input, formattedList, {
-    extract: el => el.name,
-  })
-  return fuzzyResult.map(result => result.original)
-}
-/**
  * prompt user to select a pull request
  *
  * @returns {Promise<PullsListValue>}
@@ -57,11 +52,10 @@ const promptPullRequestSelection = async (
     type: 'autocomplete',
     message: `Here's a list of pull requests for ${repo}:`,
     name: 'pullRequest',
-    source: autocompleteSearch,
-    bottomContent: '',
+    choices: [],
   }
 
-  const { pullRequest } = await ux.prompt<AnsSelectPull>(questions)
+  const { pullRequest } = await keyValPrompt(questions, formattedList)
   return pullRequest
 }
 
@@ -97,7 +91,7 @@ export const pullsList = async (cmdOptions: CommandOptions) => {
 
     formattedList = formatList(pulls)
     const { url } = await promptPullRequestSelection(repo)
-    sdk.log(
+    await ux.print(
       `\nView the pull request here: 🔗 ${ux.colors.actionBlue(`${url}`)}\n`,
     )
   } catch (err) {

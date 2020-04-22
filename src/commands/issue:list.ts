@@ -1,18 +1,23 @@
-import { sdk, ux } from '@cto.ai/sdk'
-import * as fuzzy from 'fuzzy'
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
+import { ParseAndHandleError } from '../errors'
+import { getConfig } from '../helpers/config'
 import { getGithub } from '../helpers/getGithub'
 import { isRepoCloned } from '../helpers/isRepoCloned'
-import { IssueListFuzzy, IssueListValue } from '../types/IssueTypes'
+import { keyValPrompt } from '../helpers/promptUtils'
 import { AnsIssueList } from '../types/Answers'
-import { Question } from '@cto.ai/inquirer'
-import { getConfig } from '../helpers/config'
-import { ParseAndHandleError } from '../errors'
+import { IssueListValue } from '../types/IssueTypes'
 
 const debug = Debug('github:issueList')
 
-let formattedList = []
+let formattedList: {
+  name: string
+  value: {
+    number: number
+    title: string
+  }
+}[] = [] //see formatListRepo()
 
 const formatListRepo = (issues: Github.IssuesListForRepoResponse) => {
   return issues.map(issue => {
@@ -45,18 +50,6 @@ const formatListAll = (issues: Github.IssuesListResponse) => {
   })
 }
 
-/**
- * Does fuzzy search in the list for the matching characters
- *
- * @param {string} [input='']
- */
-const autocompleteSearch = async (_: any, input = '') => {
-  const fuzzyResult = await fuzzy.filter<IssueListFuzzy>(input, formattedList, {
-    extract: el => el.name,
-  })
-  return fuzzyResult.map(result => result.original)
-}
-
 const promptIssueSelection = async (): Promise<IssueListValue> => {
   const question: Question<AnsIssueList> = {
     type: 'autocomplete',
@@ -64,10 +57,9 @@ const promptIssueSelection = async (): Promise<IssueListValue> => {
       `🔍 Start work on an issue by running 'ops issue:start'!`,
     )}\n`,
     name: 'issue',
-    source: autocompleteSearch,
-    bottomContent: '',
+    choices: [],
   }
-  const { issue } = await ux.prompt<AnsIssueList>(question)
+  const { issue } = await keyValPrompt(question, formattedList)
   return issue
 }
 
@@ -120,25 +112,27 @@ export const issueList = async ({ currentRepo }) => {
 
       // check if issues exist
       if (!issues || !issues.length) {
-        sdk.log(`\n❌ There are no issues. Create one with 'issue:create'.\n`)
+        await ux.print(
+          `\n❌ There are no issues. Create one with 'issue:create'.\n`,
+        )
         process.exit()
       }
 
       // format list for repo specific issues
       formattedList = formatListRepo(issues)
       const { number, title } = await promptIssueSelection()
-      sdk.log(
+      await ux.print(
         `\n✅ Run '$ ops run github issue:start' to get started with the issue '# ${number} - ${title}'.\n`,
       )
       process.exit()
     }
 
-    // if cuurent repo is undefined, list all issues
+    // if current repo is undefined, list all issues
     const issues = await getIssuesAll(github)
 
     // check if issues exist
     if (!issues || !issues.length) {
-      sdk.log(`❌ There are no issues. Create one with 'issue:create'.`)
+      await ux.print(`❌ There are no issues. Create one with 'issue:create'.`)
       process.exit()
     }
 
@@ -147,12 +141,12 @@ export const issueList = async ({ currentRepo }) => {
 
     const remoteRepos = (await getConfig('remoteRepos')) || []
     if (isRepoCloned(repoOwner, repoName, remoteRepos)) {
-      sdk.log(
+      await ux.print(
         `\n✅ cd ${repoName} and use command 'ops run github issue:start' to get started with the issue.\n`,
       )
       process.exit()
     }
-    sdk.log(
+    await ux.print(
       `\n🤖 Repo ${repoName} is not yet cloned. Clone the repo using command repo:clone and then use issue:start to get started on the issue.\n`,
     )
   } catch (err) {

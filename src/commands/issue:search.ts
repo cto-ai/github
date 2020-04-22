@@ -1,58 +1,48 @@
-import { ux, sdk } from '@cto.ai/sdk'
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
 import Debug from 'debug'
 import { LABELS } from '../constants'
-import { getGithub } from '../helpers/getGithub'
-import { execPromisified } from '../helpers/execPromisified'
-import { checkForLocalBranch, makeInitialCommit } from '../helpers/git'
-import { CheckboxQuestion } from '@cto.ai/inquirer'
-import { AutoCompleteQuestion } from '@cto.ai/inquirer'
-import stripAnsi from 'strip-ansi'
-import { CommandOptions } from '../types/Config'
-import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
-import {
-  IssueSelection,
-  IssueSelectionItem,
-  HelpInfo,
-  DataForFilter,
-} from '../types/IssueTypes'
-import { AnsFilterSelect, AnsIssueSelect } from '../types/Answers'
 import { ParseAndHandleError } from '../errors'
+import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
+import { execPromisified } from '../helpers/execPromisified'
+import { getGithub } from '../helpers/getGithub'
+import { checkForLocalBranch, makeInitialCommit } from '../helpers/git'
+import { keyValPrompt } from '../helpers/promptUtils'
+import { AnsFilterSelect } from '../types/Answers'
+import { CommandOptions } from '../types/Config'
+import {
+  DataForFilter,
+  HelpInfo,
+  IssueSelectionItem,
+} from '../types/IssueTypes'
+import stripAnsi = require('strip-ansi')
 
 const debug = Debug('github:issueSearch')
+const yargs = require('yargs')
 
-const filterSelectPrompt = (
-  list: string[],
-): AutoCompleteQuestion<AnsFilterSelect>[] => [
+const filterSelectPrompt = (list: string[]): Question<AnsFilterSelect>[] => [
   {
     type: 'autocomplete',
     name: 'filter',
     message: 'Please select the filter',
-    autocomplete: list,
-    pageSize: process.stdout.rows,
+    choices: list,
   },
 ]
 
-const issueSelectPrompt = (
-  list: IssueSelection[],
-): AutoCompleteQuestion<AnsIssueSelect>[] => [
-  {
-    type: 'autocomplete',
-    name: 'issue',
-    message: 'Please select the issue (use ➡️  key to view body)',
-    autocomplete: list,
-    pageSize: process.stdout.rows,
-  },
-]
+const issueSelectPrompt: Question = {
+  type: 'autocomplete',
+  name: 'issue',
+  message: 'Please select the issue (use ➡️  key to view body)',
+  choices: [],
+}
 
-const checkboxPrompt = (list): CheckboxQuestion<AnsFilterSelect>[] => {
+const checkboxPrompt = (list): Question<AnsFilterSelect>[] => {
   return [
     {
       type: 'checkbox',
       name: 'issueFilter',
       message: 'Please select the filter',
       choices: list,
-      pageSize: process.stdout.rows,
     },
   ]
 }
@@ -148,7 +138,7 @@ export const issueSearch = async (cmdOptions: CommandOptions) => {
     let q = `is:issue+repo:${owner}/${repo}`
 
     //checks for query flag: -q || --query
-    const argv = sdk.yargs.alias('q', 'query').nargs('q', 1).argv
+    const argv = yargs.alias('q', 'query').nargs('q', 1).argv
     if (!argv.q) {
       const checkBoxlist = [
         {
@@ -246,7 +236,7 @@ ${stateStr}\t ${commentStr}\t ${assigneeStr}\n`
       }
     })
 
-    const { issue } = await ux.prompt(issueSelectPrompt(issueSelectionList))
+    const { issue } = await keyValPrompt(issueSelectPrompt, issueSelectionList)
 
     await ux.spinner.start('🚧 Setting up a branch...')
     const branchName = `${issue.number}-${issue.title.replace(/\s/g, '-')}`
@@ -281,7 +271,7 @@ ${stateStr}\t ${commentStr}\t ${assigneeStr}\n`
         LABELS.PM_TASKS.name,
       )
     }
-    sdk.log(
+    await ux.print(
       `\n🙌 Issue ${ux.colors.callOutCyan(
         `${issue.number}-${issue.title}`,
       )} has been checked out and ready to be worked on.\nUse ${ux.colors.callOutCyan(

@@ -1,28 +1,26 @@
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
-import { ux, sdk } from '@cto.ai/sdk'
-import * as fuzzy from 'fuzzy'
 import Debug from 'debug'
+import { ParseAndHandleError } from '../errors'
+import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
 import { getGithub } from '../helpers/getGithub'
 import {
-  getAllLabelsForRepo,
   editLabel,
   findReposWithSelectedLabel,
+  getAllLabelsForRepo,
 } from '../helpers/labels'
+import { keyValPrompt } from '../helpers/promptUtils'
+import {
+  AnsSelectLabelEdit,
+  AnsSelectReposForLabel,
+  AnsSelectYesNo,
+} from '../types/Answers'
 import { CommandOptions } from '../types/Config'
 import {
   LabelEditFormattedItem,
   LabelKeys,
   RepoWithOwnerAndName,
 } from '../types/Labels'
-import { Question } from '@cto.ai/inquirer'
-import {
-  AnsSelectLabelEdit,
-  AnsSelectYesNo,
-  AnsSelectReposForLabel,
-} from '../types/Answers'
-import { checkCurrentRepo } from '../helpers/checkCurrentRepo'
-import { ParseAndHandleError } from '../errors'
-
 const debug = Debug('github:labelEdit')
 
 let formattedList = []
@@ -50,22 +48,6 @@ const formatList = (
 }
 
 /**
- * Does fuzzy search in the list for the matching characters
- *
- * @param {string} [input='']
- */
-const autocompleteSearch = async (_: any, input = '') => {
-  const fuzzyResult = await fuzzy.filter<LabelEditFormattedItem>(
-    input,
-    formattedList,
-    {
-      extract: el => el.name,
-    },
-  )
-  return fuzzyResult.map(result => result.original)
-}
-
-/**
  * Prompt user to select or fuzzy search for label from the labels list
  *
  * @returns {Promise<LabelEditFormattedItemValue>}
@@ -75,11 +57,10 @@ const labelSelection = async (): Promise<LabelKeys> => {
     type: 'autocomplete',
     message: 'Choose a label to edit:\n',
     name: 'label',
-    source: autocompleteSearch,
-    bottomContent: '',
+    choices: [],
   }
 
-  const { label } = await ux.prompt<AnsSelectLabelEdit>(questions)
+  const { label } = await keyValPrompt(questions, formattedList)
   return label
 }
 
@@ -94,21 +75,18 @@ const promptLabelEdit = async ({
       name: 'name',
       message: 'Enter a new name for the label:',
       default: name,
-      afterMessage: `${ux.colors.reset.green('✓')} Name`,
     },
     {
       type: 'input',
       name: 'description',
       message: 'Enter a new description for the label:',
       default: description,
-      afterMessage: `${ux.colors.reset.green('✓')} Description`,
     },
     {
       type: 'input',
       name: 'color',
       message: 'Enter a new color for the label:',
       default: color,
-      afterMessage: `${ux.colors.reset.green('✓')} Color`,
     },
   ]
 
@@ -136,20 +114,20 @@ const selectRepos = async (
     type: 'checkbox',
     name: 'reposSelected',
     message: 'Select from the list below',
-    choices: filteredRepos.map(repo => {
-      return {
-        name: `${repo.owner}/${repo.repo}`,
-        value: {
-          repo: repo.repo,
-          owner: repo.owner,
-        },
-      }
-    }),
+    choices: [],
   }
 
-  const { reposSelected } = await ux.prompt<AnsSelectReposForLabel>(
-    repoListSelect,
-  )
+  const choices = filteredRepos.map(repo => {
+    return {
+      name: `${repo.owner}/${repo.repo}`,
+      value: {
+        repo: repo.repo,
+        owner: repo.owner,
+      },
+    }
+  })
+
+  const { reposSelected } = await keyValPrompt(repoListSelect, choices)
   return reposSelected
 }
 
@@ -181,7 +159,7 @@ export const labelEdit = async (cmdOptions: CommandOptions) => {
     const yesOrNo = await promptYesNo()
 
     if (yesOrNo) {
-      sdk.log(`Finding repos that has the label ${labelName}...`)
+      await ux.print(`Finding repos that has the label ${labelName}...`)
 
       try {
         // find all repos that has the selected label
@@ -200,7 +178,7 @@ export const labelEdit = async (cmdOptions: CommandOptions) => {
               return await editLabel(owner, repo, labelName, newLabel, github)
             }),
           )
-          sdk.log(
+          await ux.print(
             `🎉 ${ux.colors.green(
               `Label ${labelName} has been updated in the selected repos.`,
             )}`,
@@ -211,7 +189,7 @@ export const labelEdit = async (cmdOptions: CommandOptions) => {
           await ParseAndHandleError(err, 'editLabel()')
         }
       } catch (err) {
-        sdk.log(`${err}\n🏃 Updating label in the current repo!`)
+        await ux.print(`${err}\n🏃 Updating label in the current repo!`)
         await ParseAndHandleError(err, 'Update label')
       }
     }
@@ -230,7 +208,7 @@ export const labelEdit = async (cmdOptions: CommandOptions) => {
       await ParseAndHandleError(err, 'editLabel()')
     }
 
-    sdk.log(
+    await ux.print(
       `🎉 ${ux.colors.green(
         `Label ${labelName} has been updated in the current repo.`,
       )}`,

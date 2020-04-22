@@ -1,18 +1,18 @@
+import { Question, ux } from '@cto.ai/sdk'
 import * as Github from '@octokit/rest'
-import { ux, sdk } from '@cto.ai/sdk'
-import { Question, AutoCompleteQuestion } from '@cto.ai/inquirer'
 import Debug from 'debug'
+import { ParseAndHandleError } from '../errors'
 import { getGithub } from '../helpers/getGithub'
-import { getAllLabelsForRepo, createLabels } from '../helpers/labels'
+import { listRepos } from '../helpers/git'
+import { createLabels, getAllLabelsForRepo } from '../helpers/labels'
+import { keyValPrompt } from '../helpers/promptUtils'
+import { AnsBaseRepo } from '../types/Answers'
 import {
   LabelEditFormattedItem,
   LabelKeys,
-  RepoWithOwnerAndName,
   RepoWithLabelsToAdd,
+  RepoWithOwnerAndName,
 } from '../types/Labels'
-import { AnsBaseRepo, AnsSyncRepo } from '../types/Answers'
-import { listRepos } from '../helpers/git'
-import { ParseAndHandleError } from '../errors'
 
 const debug = Debug('github:labelSync')
 
@@ -44,38 +44,20 @@ const formatList = (
 
 const selectBaseRepoPrompt = (
   repoList: RepoWithOwnerAndName[],
-): AutoCompleteQuestion<AnsBaseRepo>[] => [
+): Question<AnsBaseRepo>[] => [
   {
     type: 'autocomplete',
     name: 'baseRepo',
     message: 'Please select the base repo that you want to sync to.',
-    autocomplete: repoList.map(repo => `${repo.owner}/${repo.repo}`),
+    choices: repoList.map(repo => `${repo.owner}/${repo.repo}`),
   },
 ]
 
-const selectReposToSync = (
-  repoList: RepoWithOwnerAndName[],
-  baseRepo: string,
-): Question<AnsSyncRepo>[] => {
-  const filteredRepoList = repoList.filter(
-    repo => `${repo.owner}/${repo.repo}` !== baseRepo,
-  )
-  return [
-    {
-      type: 'checkbox',
-      name: 'reposToSync',
-      message: 'Select the repos you wish to sync the labels of.',
-      choices: filteredRepoList.map(repo => {
-        return {
-          name: `${repo.owner}/${repo.repo}`,
-          value: {
-            owner: repo.owner,
-            repo: repo.repo,
-          },
-        }
-      }),
-    },
-  ]
+const selectReposToSync: Question = {
+  type: 'checkbox',
+  name: 'reposToSync',
+  message: 'Select the repos you wish to sync the labels of.',
+  choices: [],
 }
 
 const formatRepoList = (
@@ -121,8 +103,19 @@ export const labelSync = async () => {
     const { baseRepo } = await ux.prompt<AnsBaseRepo>(
       selectBaseRepoPrompt(formattedRepoList),
     )
-    const { reposToSync } = await ux.prompt<AnsSyncRepo>(
-      selectReposToSync(formattedRepoList, baseRepo),
+    const { reposToSync } = await keyValPrompt(
+      selectReposToSync,
+      formattedRepoList
+        .filter(repo => `${repo.owner}/${repo.repo}` !== baseRepo)
+        .map(repo => {
+          return {
+            name: `${repo.owner}/${repo.repo}`,
+            value: {
+              owner: repo.owner,
+              repo: repo.repo,
+            },
+          }
+        }),
     )
     const { owner, repo } = findRepoObj(formattedRepoList, baseRepo)
     const baseRepoLabelList = await getAllLabelsForRepo(owner, repo, github)
@@ -160,11 +153,11 @@ export const labelSync = async () => {
             const labelStr = labels.map(
               label => `${ux.colors.hex(label.color)(label.name)}`,
             )
-            sdk.log(
+            await ux.print(
               `Adding labels: ${labelStr.join('. ')} to ${owner}/${repo}.`,
             )
           } else {
-            sdk.log(
+            await ux.print(
               `${owner}/${repo} already has labels synced with base repo!`,
             )
           }

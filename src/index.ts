@@ -2,27 +2,27 @@ const parse = require('parse-git-config')
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
 const Debug = require('debug')
+const yargs = require('yargs')
 
-import { getGithub } from './helpers/getGithub'
-import { asyncPipe } from './helpers/asyncPipe'
-import { getConfig, setConfig } from './helpers/config'
-import { updateAccessToken } from './commands/token:update'
-import { issueList } from './commands/issue:list'
 import { issueCreate } from './commands/issue:create'
 import { issueDone } from './commands/issue:done'
+import { issueList } from './commands/issue:list'
 import { issueSave } from './commands/issue:save'
-import { issueStart } from './commands/issue:start'
 import { issueSearch } from './commands/issue:search'
-import { repoClone } from './commands/repo:clone'
-import { repoCreate } from './commands/repo:create'
+import { issueStart } from './commands/issue:start'
 import { labelAdd } from './commands/label:add'
 import { labelEdit } from './commands/label:edit'
 import { labelRemove } from './commands/label:remove'
 import { labelSync } from './commands/label:sync'
 import { pullsList } from './commands/pulls:list'
-import { logProvideCmdMsg } from './helpers/logProvideCmdMsg'
-import { sdk } from '@cto.ai/sdk'
+import { repoClone } from './commands/repo:clone'
+import { repoCreate } from './commands/repo:create'
+import { updateAccessToken } from './commands/token:update'
 import { ParseAndHandleError } from './errors'
+import { asyncPipe } from './helpers/asyncPipe'
+import { getConfig, setConfig } from './helpers/config'
+import { getGithub } from './helpers/getGithub'
+import { logProvideCmdMsg } from './helpers/logProvideCmdMsg'
 
 const debug = Debug('github')
 
@@ -74,7 +74,7 @@ const shouldSkipTokenAuthentication = (args: string[]): boolean =>
   !!commands[args[0]].skipTokenAuthentication
 
 const parseArguments = async (): Promise<Partial<Pipeline>> => {
-  const args = sdk.yargs.argv
+  const args = yargs.argv
 
   if (!args._.length) {
     // log user friendly message when user does not provide a command

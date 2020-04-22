@@ -1,7 +1,7 @@
-import { run, cleanup, signin } from '../utils/cmd'
-import { ENTER, A, Q, COLON } from '../utils/constants'
-import { checkForLocalBranch } from '../../src/helpers/git'
 import { execPromisified } from '../../src/helpers/execPromisified'
+import { checkForLocalBranch } from '../../src/helpers/git'
+import { cleanup, run, signin } from '../utils/cmd'
+import { A, COLON, ENTER, Q } from '../utils/constants'
 
 beforeAll(async () => {
   await signin()
