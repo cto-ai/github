@@ -37,7 +37,7 @@
     "is-docker": "^2.0.0",
     "parse-git-config": "^3.0.0",
     "path": "^0.12.7",
-    "simple-git": "^1.113.0",
+    "simple-git": "^3.15.0",
     "strip-ansi": "^5.2.0",
     "ts-node": "^8.1.0"
   }
